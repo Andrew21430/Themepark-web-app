@@ -10,3 +10,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "da
 db.init_app(app)
 
 import app.models as models
+
+# basic route
+@app.route('/')
+def root():
+    return render_template('home.html', page_title='HOME')
