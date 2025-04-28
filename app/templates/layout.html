@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>amusment industries</title>
+		<link rel="stylesheet" href="/static/style.css">
+        <link rel="icon" type="image/x-icon" href="/app/static/Images/website/banner.jpg">
+    </head>
+    <body>
+        <!-- The Nav Bar goes here -->
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li>
+                    <a href ="/park">Parks</a>
+                    <ul class = "dropdown"> 
+                        <li><a href="/park">Parks</a></li>
+                        <li><a href="/playeraward">Player Awards</a></li>
+                        <li><a href="/playerclubs">Player Clubs</a></li>
+                        <li><a href="/internationalapperances">International Apperances</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href ="/ride">Rides</a>
+                    <ul class = "dropdown">
+                        <li><a href="/ride">Rides</a></li>
+                        <li><a href="/club_awards">Club Awards</a></li>
+                        <li><a href="/playerclubs">Player Clubs</a></li>
+                        <li><a href="/league">Leagues</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="/manufactuer">Manufactuers</a>
+                    <ul class="dropdown">
+                        <li><a href="/manufactuer">Manufactuers</a></li>
+                        <li><a href="/club_awards">Club Awards</a></li>
+                        <li><a href="/internationalawards">International Awards</a></li>
+                        <li><a href="/playeraward">Player Awards</a></li>
+                    </ul>
+                </li>
+        </nav>
+        <main class="hero-grid">
+            <div class = "flex">
+                <img class = 'heroimg' src='/app/static/Images/hero.jpg' alt="not working"> 
+            </div>
+        </main>
+        <main>
+
+            {%block content%}
+            {%endblock%}
+        </main>
+    <footer>
+        all rights reserved for oringinal creaters. Any and alll photograpsh are all copyright free under the consumers garenty act section 7 subsection 23b <br>
+        all fonts are from google fonts with lesense for use in the website licenses can be read<br>
+        Any and all information is all public and avaible to anyone conact noonereadsthis@nothere.com if you have problems<br>
+    </footer>
+    </body>
+</html>

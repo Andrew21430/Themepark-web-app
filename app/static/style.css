@@ -1,0 +1,103 @@
+
+
+/* change default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+img,
+dd {
+    margin-left: 10;
+	margin-right: 10;
+	margin-top: 0;
+	margin-bottom: 10;
+}
+
+.main {
+    margin-top: 30px; /* Add a top margin to avoid content overlay */
+}
+
+/* remove any unecciary margins and background colour for the items inside the navbar*/
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #333;
+    font-family: 'Walter-Turncoat';
+    position: fixed;
+    width: 100%;
+}
+  
+
+
+ul li{
+    display: inline-block;
+    position: relative;
+
+}
+  
+ul li a {
+    display: block;
+    padding: 20px 150px;
+    color: white;
+    text-align: left;
+    text-decoration: none;
+    font-size: 25px;
+}
+
+ul li ul.dropdown li{
+    display: block;
+}
+
+ul li ul.dropdown {
+    display: none;
+    position: absolute;
+    width: 100%;
+    z-index: 999;
+    background: #333;
+}
+
+ul li a:hover{ 
+    background: #7f7f7f;
+}
+
+ul li:hover ul.dropdown {
+    display: block;
+}
+
+
+
+.hero-grid {
+
+    display: grid;
+    gap: 1.5rem;
+    padding-bottom: 0.5rem;
+    grid-template-areas:
+        'one';
+    width: 98.5vw;
+}
+
+/* defines the childs the hero grid*/
+.hero-grid:nth-child(1) {
+    grid-area: one
+}
+
+/* places the location of the hero grid */
+.hero-grid {
+    grid-template-areas:
+        "one";
+
+}
+
+/* Sets the size for the Hero image so it fills the correct space */
+.heroimg {
+    width: 98.5vw;
+    height: 40vh;
+    border-radius: 0.5rem;
+    display: block;
+}
