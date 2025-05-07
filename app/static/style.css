@@ -152,7 +152,10 @@ ul li:hover ul.dropdown {
     display: block;
 }
 
-
+.widthhalf{
+    width: 50vw;
+    height: auto;
+}
 /* Grids */
 
 .twocol-grid{
