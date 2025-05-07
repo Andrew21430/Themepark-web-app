@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+{% block content %}
+<main class="twocol-grid">
+{% for park in parks %}
+    <article>
+        <h1>{{park.name}} </h1> <p>{{park.description}} {{park.location}}</p>
+    </article>
+    <article>
+    <img src="/app/static/Images/website/{{park.photo}}">
+    </article>
+{% endfor %}
+
+</main>
+{% endblock %}

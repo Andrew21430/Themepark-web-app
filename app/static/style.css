@@ -1,4 +1,30 @@
+/* Sets up Custom font */
+@font-face {
+    font-family: 'ShadowsIntoLightTwo';
+    /* Imports font from URL */
+    src: url(/static/fonts/ShadowsIntoLightTwo-Regular.ttf);
+}
 
+/* Sets up Custom font */
+@font-face {
+    font-family: 'Iansui';
+    /* Imports font from URL */
+    src: url(/static/fonts/Iansui-Regular.ttf);
+}
+
+/* Sets up Custom font */
+@font-face {
+    font-family: 'MedievalSharp';
+    /* Imports font from URL */
+    src: url(/static/fonts/MedievalSharp-Regular.ttf);
+}
+
+/* Sets up Custom font */
+@font-face {
+    font-family: 'Quintessential';
+    /* Imports font from URL */
+    src: url(/app/static/fonts/Quintessential-Regular.ttf);
+}
 
 /* change default margin */
 body,
@@ -22,13 +48,36 @@ dd {
     margin-top: 30px; /* Add a top margin to avoid content overlay */
 }
 
+/* setting up body */
+body{
+	color:#0f0f0f;
+    /* sets font for the page */
+    font-family: 'Iansui';
+	font-size: 2rem;
+	background-color: #fefae0;
+}
+
+
+p{
+    font-family: 'Iansui';
+}
+
+h1,h2,h3,h4,header{
+    font-family: 'Quintessential';
+}
+
+footer{
+    font-family: 'ShadowsIntoLightTwo';
+}
+
+
 /* remove any unecciary margins and background colour for the items inside the navbar*/
 ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
     background-color: #333;
-    font-family: 'Walter-Turncoat';
+    font-family: 'MedievalSharp';
     position: fixed;
     width: 100%;
 }
@@ -56,6 +105,7 @@ ul li ul.dropdown li{
 
 ul li ul.dropdown {
     display: none;
+    padding: auto;
     position: absolute;
     width: 100%;
     z-index: 999;
@@ -103,3 +153,28 @@ ul li:hover ul.dropdown {
 }
 
 
+/* Grids */
+
+.twocol-grid{
+    display: grid;
+    gap: 1.5rem;
+    padding: 1rem;
+    background-color: #f4f1bb;
+    grid-template-columns: 
+        repeat(2, 1fr)
+
+}
+
+
+
+.gridspan2{
+    grid-column: span 2;
+}
+
+
+
+.twocol-grid-grid>article:nth-child(1n+1),
+.twocol-grid-grid>article:nth-child(1n+2)
+{
+    background-color: #f4f1bb;
+}

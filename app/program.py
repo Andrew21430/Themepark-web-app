@@ -15,3 +15,16 @@ import app.models as models
 @app.route('/')
 def root():
     return render_template('home.html', page_title='HOME')
+
+@app.route('/park')
+def park():
+    parks = models.Park.query.all()
+    return render_template('park.html', page_title='PARKS', parks=parks)
+
+@app.route('/ride')
+def ride():
+    return render_template('ride.html', page_title='RIDES')
+
+@app.route('/manufactuer')
+def manufactuer():
+    return render_template('manufactuer.html', page_title='MANUFACTUER')
