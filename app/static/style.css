@@ -162,7 +162,6 @@ ul li:hover ul.dropdown {
     display: grid;
     gap: 1.5rem;
     padding: 1rem;
-    background-color: #f4f1bb;
     grid-template-columns: 
         repeat(2, 1fr)
 
@@ -175,9 +174,14 @@ ul li:hover ul.dropdown {
 }
 
 
-
-.twocol-grid-grid>article:nth-child(1n+1),
-.twocol-grid-grid>article:nth-child(1n+2)
-{
+/* Highlight even-numbered rows (articles 1+2, 5+6, etc.) */
+.twocol-grid > article:nth-child(4n - 3),
+.twocol-grid > article:nth-child(4n - 2) {
     background-color: #f4f1bb;
+}
+
+/* style odd-numbered rows (articles 3+4, 7+8, etc.) differently */
+.twocol-grid > article:nth-child(4n - 1),
+.twocol-grid > article:nth-child(4n) {
+    background-color: #fefae0;
 }
