@@ -178,10 +178,12 @@ ul li:hover ul.dropdown {
 .twocol-grid > article:nth-child(4n - 3),
 .twocol-grid > article:nth-child(4n - 2) {
     background-color: #f4f1bb;
+    border-color: #f4f1bb;
 }
 
 /* style odd-numbered rows (articles 3+4, 7+8, etc.) differently */
 .twocol-grid > article:nth-child(4n - 1),
 .twocol-grid > article:nth-child(4n) {
     background-color: #fefae0;
+    border-color: #fefae0;
 }
