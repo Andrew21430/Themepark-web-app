@@ -34,3 +34,9 @@ def ride():
 def manufactuer():
     manufactuers = models.Manufacturer.query.all()
     return render_template('manufactuer.html', page_title='MANUFACTUER', manufactuers=manufactuers)
+
+
+@app.route('/rideelements')
+def rideelements():
+    elements = models.RideElement.query.all()
+    return render_template('rideelement.html', page_title ='RIDEELEMENTS', elements=elements)

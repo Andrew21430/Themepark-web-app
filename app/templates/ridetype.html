@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+{% block content %}
+<main class="twocol-grid">
+{% for type in types %}
+    {# Determine layout direction: 
+        If index is even (0, 2, 4...), show image on the right.
+        If index is odd (1, 3, 5...), show image on the left. #}
+    {% set flipped = loop.index0 is even %}
+        {% if flipped %}
+            {# Even index (0, 2, 4...): Text on left, Image on right #}
+            <article>
+                <h1>{{ride.name}} {{ride.thrill_level}}</h1> <p>{{ride.layout.description}} </p> 
+                <!-- ride.layout.description is how to query the decription column form the ride table joining layout-->
+            </article>
+            <article>
+                <img class = "widthhalf" src="/static/Images/website/{{ride.photo}}">
+            </article>
+        {% else %}
+            {# Odd index (1, 3, 5...): Image on left, Text on right #}
+            <article>
+                <img class = "widthhalf" src="/static/Images/website/{{ride.photo}}">
+            </article>
+            <article>
+                <h1>{{ride.name}} {{ride.thrill_level}}</h1> <p>{{ride.layout.description }}</p>
+            </article>
+        {% endif %}
+
+    {% endfor %}
+
+
+</main>
+{% endblock %}

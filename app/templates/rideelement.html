@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+{% block content %}
+<main class="twocol-grid">
+{% for element in elements %}
+    {# Determine layout direction: 
+        If index is even (0, 2, 4...), show image on the right.
+        If index is odd (1, 3, 5...), show image on the left. #}
+    {% set flipped = loop.index0 is even %}
+        {% if flipped %}
+            {% if element.inverted == 0%}
+                {# Even index (0, 2, 4...): Text on left, Image on right #}
+                <article>
+                    <h1>{{element.name}} </h1> <h3>Inverted: NO</h3><p> {{element.description}}</p>
+                </article>
+                <article>
+                    <img class = "widthhalf" src="/static/Images/website/{{element.photo}}">
+                </article>
+            {% else %}
+                {# Even index (0, 2, 4...): Text on left, Image on right #}
+                <article>
+                    <h1>{{element.name}} </h1> <h3>Inverted: YES</h3><p>{{element.description}}</p>
+                </article>
+                <article>
+                    <img class = "widthhalf" src="/static/Images/website/{{element.photo}}">
+                </article>
+            {% endif %}
+        {% else %}
+            {% if element.inverted == 0%}
+                {# Odd index (1, 3, 5...): Image on left, Text on right #}
+                <article>
+                    <img class = "widthhalf" src="/static/Images/website/{{element.photo}}">
+                </article>
+                <article>
+                    <h1>{{element.name}} </h1> <h3>Inverted: NO</h3> <p>{{element.description}}</p>
+                </article>
+            {% else %}
+                {# Odd index (1, 3, 5...): Image on left, Text on right #}
+                <article>
+                    <img class = "widthhalf" src="/static/Images/website/{{element.photo}}">
+                </article>
+                <article>
+                    <h1>{{element.name}} </h1> <h3>Inverted: NO</h3><p>{{element.description}}</p>
+                </article>
+            {% endif %}
+        {% endif %}
+
+    {% endfor %}
+
+
+</main>
+{% endblock %}
