@@ -40,3 +40,10 @@ def manufactuer():
 def rideelements():
     elements = models.RideElement.query.all()
     return render_template('rideelement.html', page_title ='RIDEELEMENTS', elements=elements)
+
+
+@app.route('/ridetype')
+def ridetype():
+    #types = models.RideType.query.join(models.RideTypeManufacturer).join(models.Manufacturer).all()
+    types = models.RideType.query.options(db.joinedload(models.RideType.manufacturers)).all()
+    return render_template('ridetype.html', page_title = 'RIDETYPES', types=types)

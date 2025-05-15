@@ -1,8 +1,8 @@
 from app.program import db
 
 # Association table for many-to-many relationship between RideType and Manufacturer
-RideTypeManufacturer = db.Table('ridetype_manufacturer',
-    db.Column('ridetype_id', db.Integer, db.ForeignKey('ride_type.id')),
+RideTypeManufacturer = db.Table('RideType_Manufacturer',
+    db.Column('ride_type_id', db.Integer, db.ForeignKey('ride_type.id')),
     db.Column('manufacturer_id', db.Integer, db.ForeignKey('manufacturer.id'))
 )
 
