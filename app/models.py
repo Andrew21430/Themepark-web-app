@@ -1,11 +1,13 @@
 from app.program import db
+'''
+changed ride type relation ship to be a one to many from a many to many
 
 # Association table for many-to-many relationship between RideType and Manufacturer
 RideTypeManufacturer = db.Table('RideType_Manufacturer',
     db.Column('ride_type_id', db.Integer, db.ForeignKey('ride_type.id')),
     db.Column('manufacturer_id', db.Integer, db.ForeignKey('manufacturer.id'))
 )
-
+'''
 # Association table for ride elements and layouts
 RideElementsLayout = db.Table('rideelements_layout',
     db.Column('ride_elements_id', db.Integer, db.ForeignKey('ride_elements.id')),
@@ -27,7 +29,8 @@ class Manufacturer(db.Model):
     description = db.Column(db.Text)
     photo = db.Column(db.Text)
 
-    ride_types = db.relationship('RideType', secondary=RideTypeManufacturer, back_populates='manufacturers')
+    #ride_types = db.relationship('RideType', secondary=RideTypeManufacturer, back_populates='manufacturers')
+    ride_types = db.relationship('RideType', back_populates='manufacturer')
 
 
 class RideType(db.Model):
@@ -37,8 +40,9 @@ class RideType(db.Model):
     description = db.Column(db.Text)
     track_photo = db.Column(db.Text)
     train_photo = db.Column(db.Text)
-
-    manufacturers = db.relationship('Manufacturer', secondary=RideTypeManufacturer, back_populates='ride_types')
+    manufacturer_id = db.Column(db.Integer, db.ForeignKey('manufacturer.id'))
+    
+    manufacturer = db.relationship('Manufacturer', back_populates='ride_types')
     rides = db.relationship('Ride', backref='ride_type')
 
 

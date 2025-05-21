@@ -55,14 +55,15 @@ def manufactuer():
 @app.route('/rideelements')
 def rideelements():
     elements = models.RideElement.query.all()
-    return render_template('rideelement.html', page_title ='RIDEELEMENTS', elements=elements)
+    return render_template('rideelement.html', page_title='RIDEELEMENTS', elements=elements)
 
 
 @app.route('/ridetype')
 def ridetype():
-    types = models.RideType.query.options(db.joinedload(models.RideType.manufacturers)).all()
-    #joinedload is used to join many to many tables
-    return render_template('ridetype.html', page_title = 'RIDETYPES', types=types)
+    # types = models.RideType.query.options(db.joinedload(models.RideType.manufacturers)).all()
+    # joinedload is used to join many to many tables
+    types = models.RideType.query.join(models.Manufacturer).all()
+    return render_template('ridetype.html', page_title='RIDETYPES', types=types)
 
 
 @app.route('/add', methods=['GET', 'POST'])
