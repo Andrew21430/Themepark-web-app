@@ -168,6 +168,15 @@ ul li:hover ul.dropdown {
 }
 
 
+.twocol-grid-thrid{
+    display: grid;
+    gap: 1.5rem;
+    padding: 1rem;
+    grid-template-columns: 
+        repeat(2, 1fr)
+
+}
+
 
 .gridspan2{
     grid-column: span 2;
@@ -184,6 +193,21 @@ ul li:hover ul.dropdown {
 /* style odd-numbered rows (articles 3+4, 7+8, etc.) differently */
 .twocol-grid > article:nth-child(4n - 1),
 .twocol-grid > article:nth-child(4n) {
+    background-color: #fefae0;
+    border-color: #fefae0;
+}
+
+
+/* different colour alternating for ride types gird due to the two colspam */
+
+
+.twocol-grid-thrid > article:nth-child(3n - 1),
+.twocol-grid-thrid > article:nth-child(3n - 2) {
+    background-color: #f4f1bb;
+    border-color: #f4f1bb;
+}
+
+.twocol-grid-thrid > article:nth-child(3n){
     background-color: #fefae0;
     border-color: #fefae0;
 }

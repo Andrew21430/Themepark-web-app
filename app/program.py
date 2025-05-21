@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template, abort
+from flask import render_template, abort, request
 from flask_sqlalchemy import SQLAlchemy  # no more boring old SQL for us!
 import os
 
@@ -44,6 +44,13 @@ def rideelements():
 
 @app.route('/ridetype')
 def ridetype():
-    #types = models.RideType.query.join(models.RideTypeManufacturer).join(models.Manufacturer).all()
     types = models.RideType.query.options(db.joinedload(models.RideType.manufacturers)).all()
+    #joinedload is used to join many to many tables
     return render_template('ridetype.html', page_title = 'RIDETYPES', types=types)
+
+
+@app.route('/add', methods=['GET', 'POST'])
+def add():
+    print(request.args.get('ROR2'))
+    return "Done"
+    # return render_template('add.html', page_title = 'ADD')
