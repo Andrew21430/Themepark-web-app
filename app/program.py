@@ -6,6 +6,8 @@ from flask_wtf import FlaskForm, CSRFProtect
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, Length
 import os
+import secrets
+
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -14,6 +16,16 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "da
 db.init_app(app)
 
 import app.models as models
+
+
+# flask secret key protection
+foo = secrets.token_urlsafe(16)
+app.secret_key = foo
+
+# Bootstrap-Flask requires this line
+bootstrap = Bootstrap5(app)
+# Flask-WTF requires this line
+csrf = CSRFProtect(app)
 
 
 # basic route
