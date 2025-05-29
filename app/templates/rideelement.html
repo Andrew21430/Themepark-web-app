@@ -13,7 +13,7 @@
                     <h1>{{element.name}} </h1> <h3>Inverted: NO</h3><p> {{element.description}}</p>
                 </article>
                 <article>
-                    <img class = "widthhalf" src="/static/Images/website/{{element.photo}}">
+                    <img class = "widthhalf" src="/static/Images/website/elements/{{element.photo}}">
                 </article>
             {% else %}
                 {# Even index (0, 2, 4...): Text on left, Image on right #}
@@ -21,14 +21,14 @@
                     <h1>{{element.name}} </h1> <h3>Inverted: YES</h3><p>{{element.description}}</p>
                 </article>
                 <article>
-                    <img class = "widthhalf" src="/static/Images/website/{{element.photo}}">
+                    <img class = "widthhalf" src="/static/Images/website/elements/{{element.photo}}">
                 </article>
             {% endif %}
         {% else %}
             {% if element.inverted == 0%}
                 {# Odd index (1, 3, 5...): Image on left, Text on right #}
                 <article>
-                    <img class = "widthhalf" src="/static/Images/website/{{element.photo}}">
+                    <img class = "widthhalf" src="/static/Images/website/elements/{{element.photo}}">
                 </article>
                 <article>
                     <h1>{{element.name}} </h1> <h3>Inverted: NO</h3> <p>{{element.description}}</p>
@@ -36,7 +36,7 @@
             {% else %}
                 {# Odd index (1, 3, 5...): Image on left, Text on right #}
                 <article>
-                    <img class = "widthhalf" src="/static/Images/website/{{element.photo}}">
+                    <img class = "widthhalf" src="/static/Images/website/elements/{{element.photo}}">
                 </article>
                 <article>
                     <h1>{{element.name}} </h1> <h3>Inverted: NO</h3><p>{{element.description}}</p>
