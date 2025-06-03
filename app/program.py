@@ -30,7 +30,7 @@ def park():
 
 @app.route('/ride')
 def ride():
-    rides = models.Ride.query.join(models.Layout).all()
+    rides = models.Ride.query.join(models.Layout).order_by(models.Ride.height.desc()).all()
     return render_template('ride.html', page_title='RIDES', rides=rides)
 
 

@@ -115,6 +115,7 @@ class Ride(db.Model):
     restriction_id = db.Column(db.Integer, db.ForeignKey('restrictions.id'))
     constructor_id = db.Column(db.Integer, db.ForeignKey('constructor.id'))
     photo = db.Column(db.Text)
+    height = db.Column(db.Integer)
 
     parks = db.relationship('Park', secondary=ParkRide, back_populates='rides')
 
