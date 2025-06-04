@@ -357,25 +357,25 @@ ul li:hover ul.dropdown {
 
 
 
-.cloud-fast:nth-child(1) {
+.cloud-fast:nth-child(9) {
     top: 20%;
     left: -150px;
-    animation-delay: 0s;
+    animation-delay: 1s;
     width: 120px;
     height: 50px;
     opacity: 0.7;
 }
 
-.cloud-fast:nth-child(2) {
+.cloud-fast:nth-child(10) {
     top: 25%;
     left: -150px;
-    animation-delay: 2s;
+    animation-delay: 3s;
     width: 90px;
     height: 35px;
     opacity: 0.5;
 }
 
-.cloud-fast:nth-child(3) {
+.cloud-fast:nth-child(11) {
     top: 30%;
     left: -150px;
     animation-delay: 4s;
@@ -384,46 +384,46 @@ ul li:hover ul.dropdown {
     opacity: 0.6;
 }
 
-.cloud-fast:nth-child(4) {
+.cloud-fast:nth-child(12) {
     top: 35%;
     left: -150px;
-    animation-delay: 6s;
+    animation-delay: 10s;
     width: 80px;
     height: 30px;
     opacity: 0.4;
 }
 
-.cloud-fast:nth-child(5) {
+.cloud-fast:nth-child(13) {
     top: 40%;
     left: -150px;
-    animation-delay: 8s;
+    animation-delay: 5s;
     width: 100px;
     height: 40px;
     opacity: 0.7;
 }
 
-.cloud-fast:nth-child(6) {
+.cloud-fast:nth-child(14) {
     top: 99%;
     left: -150px;
-    animation-delay: 10s;
+    animation-delay: 0.55s;
     width: 95px;
     height: 38px;
     opacity: 0.5;
 }
 
-.cloud-fast:nth-child(7) {
+.cloud-fast:nth-child(15) {
     top: 5%;
     left: -150px;
-    animation-delay: 12s;
+    animation-delay: 0.12s;
     width: 85px;
     height: 32px;
     opacity: 0.6;
 }
 
-.cloud-fast:nth-child(8) {
+.cloud-fast:nth-child(16) {
     top: 1%;
     left: -150px;
-    animation-delay: 14s;
+    animation-delay: 50s;
     width: 115px;
     height: 48px;
     opacity: 0.4;
