@@ -1,5 +1,24 @@
 {% extends 'layout.html' %}
 {% block content %}
+<div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+
+    <div class="cloud-fast"></div>
+    <div class="cloud-fast"></div>
+    <div class="cloud-fast"></div>
+    <div class="cloud-fast"></div>
+    <div class="cloud-fast"></div>
+    <div class="cloud-fast"></div>
+    <div class="cloud-fast"></div>
+    <div class="cloud-fast"></div>
+</div>
 <main class="twocol-grid">
     {% for ride in rides %}
         {# Determine layout direction: 
@@ -43,6 +62,18 @@
         document.getElementById('bottom-content').scrollIntoView({ behavior: 'smooth' });
         };
     </script>
+
+    {# style code just for this page to have a nice gradient to show tyhe increase in height as you scroll up#}
+    <style>
+            body {
+            scroll-behavior: smooth;
+            background: linear-gradient(to bottom, #E0F7FA, #B3E5FC, #4FC3F7);
+            overflow-x: hidden;
+        }
+
+    </style>
+
+
 
 </main>
 {% endblock %}
