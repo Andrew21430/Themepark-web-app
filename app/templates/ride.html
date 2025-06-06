@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% block content %}
-<div>
+{# old cloud code new one is done with java script<div>
     <div class="cloud"></div>
     <div class="cloud"></div>
     <div class="cloud"></div>
@@ -18,6 +18,56 @@
     <div class="cloud-fast"></div>
     <div class="cloud-fast"></div>
     <div class="cloud-fast"></div>
+</div>
+#}
+
+<div id="cloud-container">
+    <script>
+        const cloudContainer = document.getElementById('cloud-container');
+        
+        function createCloud(topPx) {
+            const cloud = document.createElement('div');
+            cloud.classList.add('cloud-base');
+        
+            const topPercent = (topPx / window.innerHeight) * 100;
+        
+            // Speed tiers based on screen height position
+            if (topPercent < 20) cloud.classList.add('cloud-fastest');
+            else if (topPercent < 40) cloud.classList.add('cloud-fast');
+            else if (topPercent < 70) cloud.classList.add('cloud-medium');
+            else cloud.classList.add('cloud-slow');
+        
+            // Random size
+            const width = 80 + Math.random() * 60;
+            const height = 25 + Math.random() * 20;
+            cloud.style.width = `${width}px`;
+            cloud.style.height = `${height}px`;
+        
+            cloud.style.top = `${topPx}px`;
+            cloud.style.left = `-150px`;
+            cloud.style.animationDelay = `${Math.random() * 5}s`;
+        
+            cloudContainer.appendChild(cloud);
+        }
+        
+        // Gradual cloud spawn across full visible screen
+        let spawned = 0;
+        const maxClouds = 50;
+        const spawnInterval = 400;
+        
+        const cloudSpawner = setInterval(() => {
+            if (spawned >= maxClouds) {
+                clearInterval(cloudSpawner);
+                return;
+            }
+        
+            const top = Math.floor(Math.random() * window.innerHeight);
+            createCloud(top);
+            spawned++;
+        }, spawnInterval);
+        </script>
+        
+        
 </div>
 <main class="twocol-grid">
     {% for ride in rides %}
