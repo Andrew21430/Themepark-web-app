@@ -1,6 +1,7 @@
 from app import app
 from flask import render_template, abort, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy  # no more boring old SQL for us!
+from sqlalchemy.orm import joinedload
 import os
 
 
@@ -57,3 +58,8 @@ def add():
     print(request.args.get('ROR2'))
     return "Done"
     # return render_template('add.html', page_title = 'ADD')
+
+@app.route('/parkrides')
+def parkrides():
+   parks = models.Park.query.options(joinedload(models.Park.park_rides).joinedload(models.ParkRide.ride)).all()
+   return render_template('parkrides.html', page_title='PARKRIDES',parks=parks)

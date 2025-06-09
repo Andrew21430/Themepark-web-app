@@ -20,6 +20,7 @@ ParkRide = db.Table('park_ride',
     db.Column('park_id', db.Integer, db.ForeignKey('park.id')),
     db.Column('ride_id', db.Integer, db.ForeignKey('ride.id')),
     db.Column('photo', db.Text)
+    
 )
 
 class Manufacturer(db.Model):
@@ -128,4 +129,4 @@ class Park(db.Model):
     location = db.Column(db.Integer)
     photo = db.Column(db.Text)
 
-    rides = db.relationship('Ride', secondary=ParkRide, back_populates='parks')
+    rides = db.relationship('Ride', secondary=ParkRide, backref=db.backref('parks',lazy='select'),lazy='select')
