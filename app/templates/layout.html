@@ -9,6 +9,7 @@
         <link rel="icon" type="image/x-icon" href="/app/static/Images/website/banner.jpg">
     </head>
     <body>
+        
         <!-- The Nav Bar goes here -->
          <nav>
             <nav>
@@ -44,9 +45,78 @@
         </main>
         <br><br>
         <main>
+            <div id="cloud-container">
+                <script>
+                    const cloudContainer = document.getElementById('cloud-container');
+                    
+                    function createCloud(yPosition, pageHeight) {
+                      const cloud = document.createElement('div');
+                      cloud.classList.add('cloud-base');
+                    
+                      // Place vertically
+                      cloud.style.top = `${yPosition}px`;
+                    
+                      // Cloud size
+                      const width = 80 + Math.random() * 60;
+                      const height = 25 + Math.random() * 20;
+                      cloud.style.width = `${width}px`;
+                      cloud.style.height = `${height}px`;
+                    
+                      // Random horizontal start delay
+                      cloud.style.animationDelay = `${Math.random() * 10}s`;
+                    
+                      // Z-index layer (higher = closer)
+                      const relativeHeight = 1 - (yPosition / pageHeight); // top = 1, bottom = 0
+                      const z = Math.floor(relativeHeight * 10) + 1;
+                      cloud.style.zIndex = z;
+                    
+                      // Speed: closer to top = faster
+                      const minDuration = 6;
+                      const maxDuration = 20;
+                      const duration = maxDuration - (relativeHeight * (maxDuration - minDuration));
+                      cloud.style.animationDuration = `${duration.toFixed(2)}s`;
+                    
+                      // Horizontal start position
+                      cloud.style.left = `-150px`;
+                    
+                      cloudContainer.appendChild(cloud);
+                    }
+                    
+                    function generateClouds() {
+                      const pageHeight = document.body.scrollHeight;
+                      cloudContainer.style.height = `${pageHeight}px`;
+                    
+                      const layers = 100;
+                      const spacing = pageHeight / layers;
+                    
+                      for (let i = 0; i < layers; i++) {
+                        const y = i * spacing;
+                    
+                        // Density increases towards top
+                        const density = Math.max(1, Math.floor((1 - i / layers) * 5));
+                    
+                        for (let j = 0; j < density; j++) {
+                          const offset = Math.random() * spacing;
+                          createCloud(y + offset, pageHeight);
+                        }
+                      }
+                    }
+                    
+                    window.addEventListener('load', generateClouds);
+                    </script>
+  
+            </div>
 
+            <script>
+                window.onload = function() {
+                document.getElementById('bottom-content').scrollIntoView({ behavior: 'smooth' });
+                };
+            </script>
             {%block content%}
             {%endblock%}
+            
+            <div id="bottom-content">
+            </div>
         </main>
     <footer>
         all rights reserved for oringinal creaters. Any and alll photograpsh are all copyright free under the consumers garenty act section 7 subsection 23b <br>

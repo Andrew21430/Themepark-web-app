@@ -21,71 +21,7 @@
 </div>
 #}
 
-<div id="cloud-container">
-    <script>
-        const cloudContainer = document.getElementById('cloud-container');
-        
-        function createCloud(yPosition, pageHeight) {
-          const cloud = document.createElement('div');
-          cloud.classList.add('cloud-base');
-        
-          // Place vertically
-          cloud.style.top = `${yPosition}px`;
-        
-          // Cloud size
-          const width = 80 + Math.random() * 60;
-          const height = 25 + Math.random() * 20;
-          cloud.style.width = `${width}px`;
-          cloud.style.height = `${height}px`;
-        
-          // Random horizontal start delay
-          cloud.style.animationDelay = `${Math.random() * 10}s`;
-        
-          // Z-index layer (higher = closer)
-          const relativeHeight = 1 - (yPosition / pageHeight); // top = 1, bottom = 0
-          const z = Math.floor(relativeHeight * 10) + 1;
-          cloud.style.zIndex = z;
-        
-          // Speed: closer to top = faster
-          const minDuration = 6;
-          const maxDuration = 20;
-          const duration = maxDuration - (relativeHeight * (maxDuration - minDuration));
-          cloud.style.animationDuration = `${duration.toFixed(2)}s`;
-        
-          // Horizontal start position
-          cloud.style.left = `-150px`;
-        
-          cloudContainer.appendChild(cloud);
-        }
-        
-        function generateClouds() {
-          const pageHeight = document.body.scrollHeight;
-          cloudContainer.style.height = `${pageHeight}px`;
-        
-          const layers = 100;
-          const spacing = pageHeight / layers;
-        
-          for (let i = 0; i < layers; i++) {
-            const y = i * spacing;
-        
-            // Density increases towards top
-            const density = Math.max(1, Math.floor((1 - i / layers) * 5));
-        
-            for (let j = 0; j < density; j++) {
-              const offset = Math.random() * spacing;
-              createCloud(y + offset, pageHeight);
-            }
-          }
-        }
-        
-        window.addEventListener('load', generateClouds);
-        </script>
-        
-        
-        
-        
-        
-</div>
+
 <main class="twocol-grid">
     {% for ride in rides %}
         {# Determine layout direction: 
@@ -121,26 +57,5 @@
     </script> #}
 
 
-    
-    <script>
-        window.onload = function() {
-        document.getElementById('bottom-content').scrollIntoView({ behavior: 'smooth' });
-        };
-    </script>
-
-    {# style code just for this page to have a nice gradient to show tyhe increase in height as you scroll up#}
-    <style>
-            body {
-            scroll-behavior: smooth;
-            background: linear-gradient(to bottom, #E0F7FA, #B3E5FC, #4FC3F7);
-            overflow-x: hidden;
-        }
-
-    </style>
-
-
-
-<div id="bottom-content">
-</div>
 </main>
 {% endblock %}

@@ -54,7 +54,9 @@ body{
     /* sets font for the page */
     font-family: 'Iansui';
 	font-size: 2rem;
-	background-color: #fefae0;
+    scroll-behavior: smooth;
+    background: linear-gradient(to bottom, #E0F7FA, #B3E5FC, #4FC3F7);
+    overflow-x: hidden;
 }
 
 
@@ -198,7 +200,7 @@ ul li:hover ul.dropdown {
 } */
 
 
-/* different colour alternating for ride types gird due to the two colspam */
+/* different colour alternating for ride types gird due to the two colspam 
 
 
 .twocol-grid-thrid > article:nth-child(3n - 1),
