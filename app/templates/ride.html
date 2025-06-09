@@ -25,47 +25,64 @@
     <script>
         const cloudContainer = document.getElementById('cloud-container');
         
-        function createCloud(topPx) {
-            const cloud = document.createElement('div');
-            cloud.classList.add('cloud-base');
+        function createCloud(yPosition, pageHeight) {
+          const cloud = document.createElement('div');
+          cloud.classList.add('cloud-base');
         
-            const topPercent = (topPx / window.innerHeight) * 100;
+          // Place vertically
+          cloud.style.top = `${yPosition}px`;
         
-            // Speed tiers based on screen height position
-            if (topPercent < 20) cloud.classList.add('cloud-fastest');
-            else if (topPercent < 40) cloud.classList.add('cloud-fast');
-            else if (topPercent < 70) cloud.classList.add('cloud-medium');
-            else cloud.classList.add('cloud-slow');
+          // Cloud size
+          const width = 80 + Math.random() * 60;
+          const height = 25 + Math.random() * 20;
+          cloud.style.width = `${width}px`;
+          cloud.style.height = `${height}px`;
         
-            // Random size
-            const width = 80 + Math.random() * 60;
-            const height = 25 + Math.random() * 20;
-            cloud.style.width = `${width}px`;
-            cloud.style.height = `${height}px`;
+          // Random horizontal start delay
+          cloud.style.animationDelay = `${Math.random() * 10}s`;
         
-            cloud.style.top = `${topPx}px`;
-            cloud.style.left = `-150px`;
-            cloud.style.animationDelay = `${Math.random() * 5}s`;
+          // Z-index layer (higher = closer)
+          const relativeHeight = 1 - (yPosition / pageHeight); // top = 1, bottom = 0
+          const z = Math.floor(relativeHeight * 10) + 1;
+          cloud.style.zIndex = z;
         
-            cloudContainer.appendChild(cloud);
+          // Speed: closer to top = faster
+          const minDuration = 6;
+          const maxDuration = 20;
+          const duration = maxDuration - (relativeHeight * (maxDuration - minDuration));
+          cloud.style.animationDuration = `${duration.toFixed(2)}s`;
+        
+          // Horizontal start position
+          cloud.style.left = `-150px`;
+        
+          cloudContainer.appendChild(cloud);
         }
         
-        // Gradual cloud spawn across full visible screen
-        let spawned = 0;
-        const maxClouds = 50;
-        const spawnInterval = 400;
+        function generateClouds() {
+          const pageHeight = document.body.scrollHeight;
+          cloudContainer.style.height = `${pageHeight}px`;
         
-        const cloudSpawner = setInterval(() => {
-            if (spawned >= maxClouds) {
-                clearInterval(cloudSpawner);
-                return;
+          const layers = 100;
+          const spacing = pageHeight / layers;
+        
+          for (let i = 0; i < layers; i++) {
+            const y = i * spacing;
+        
+            // Density increases towards top
+            const density = Math.max(1, Math.floor((1 - i / layers) * 5));
+        
+            for (let j = 0; j < density; j++) {
+              const offset = Math.random() * spacing;
+              createCloud(y + offset, pageHeight);
             }
+          }
+        }
         
-            const top = Math.floor(Math.random() * window.innerHeight);
-            createCloud(top);
-            spawned++;
-        }, spawnInterval);
+        window.addEventListener('load', generateClouds);
         </script>
+        
+        
+        
         
         
 </div>
@@ -104,8 +121,6 @@
     </script> #}
 
 
-    <div id="bottom-content">
-    </div>
     
     <script>
         window.onload = function() {
@@ -125,5 +140,7 @@
 
 
 
+<div id="bottom-content">
+</div>
 </main>
 {% endblock %}
