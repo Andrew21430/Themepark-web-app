@@ -2,7 +2,7 @@
 {% block content %}
 
 <main class="twocol-grid">
-    {% for park in parks %}
+    {% for  in parks %}
     <article><h1>{{park.name}}</h1></article>
     <article><img class = "widthhalf" src="/static/Images/website/parks/{{park.photo}}"></article>
         <ul>
@@ -29,7 +29,7 @@
                         </article>
                     {% endif %}
         </ul>
-
+            {% endfor %}
         {% endfor %}
 </main>
 {% endblock %}

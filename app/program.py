@@ -1,7 +1,9 @@
 from app import app
 from flask import render_template, abort, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy  # no more boring old SQL for us!
-from sqlalchemy.orm import joinedload
+#from sqlalchemy.orm import joinedload
+from collections import defaultdict
+
 import os
 
 
@@ -61,5 +63,10 @@ def add():
 
 @app.route('/parkrides')
 def parkrides():
-   parks = models.Park.query.options(joinedload(models.Park.park_rides).joinedload(models.ParkRide.ride)).all()
-   return render_template('parkrides.html', page_title='PARKRIDES',parks=parks)
+   #order and join of a many to many without using joined loaded as otherwise I would have to change all of my models tables
+   results = db.session.query(models.Park, models.Ride).join(models.ParkRide, models.Park.id == models.ParkRide.c.park_id).join(models.Ride, models.Ride.id == models.ParkRide.c.ride_id).order_by(models.Park.name).all()
+   #mnake it so that the parks only show once for all the rides
+   grouped_parks = defaultdict(list)
+    for park, ride in results:
+        grouped_parks[park].append(ride)   
+   return render_template('parkrides.html', page_title='PARKRIDES', grouped_parks=grouped_parks)
