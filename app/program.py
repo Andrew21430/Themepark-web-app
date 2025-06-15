@@ -67,6 +67,6 @@ def parkrides():
    results = db.session.query(models.Park, models.Ride).join(models.ParkRide, models.Park.id == models.ParkRide.c.park_id).join(models.Ride, models.Ride.id == models.ParkRide.c.ride_id).order_by(models.Park.name).all()
    #mnake it so that the parks only show once for all the rides
    grouped_parks = defaultdict(list)
-    for park, ride in results:
+   for park, ride in results:
         grouped_parks[park].append(ride)   
    return render_template('parkrides.html', page_title='PARKRIDES', grouped_parks=grouped_parks)
