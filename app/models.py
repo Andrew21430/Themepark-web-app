@@ -52,6 +52,7 @@ class RideElement(db.Model):
     name = db.Column(db.Text)
     description = db.Column(db.Text)
     inverted = db.Column(db.Integer)
+    photo = db.Column(db.Text)
 
 
 class LaunchType(db.Model):

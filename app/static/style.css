@@ -167,7 +167,7 @@ ul li:hover ul.dropdown {
 }
 
 p:hover{
-    transform: scale(1.01);
+    font-weight: bold;
 }
 /* Grids */
 
