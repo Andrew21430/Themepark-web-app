@@ -84,6 +84,7 @@ ul {
     font-family: 'MedievalSharp';
     position: fixed;
     width: 100%;
+    z-index: 10;
 }
   
 
@@ -160,6 +161,7 @@ ul li:hover ul.dropdown {
     width: 47vw;
     height: auto;
     transition: 0.75s;
+    z-index: 0;
 }
 
 .widthhalf:hover{
