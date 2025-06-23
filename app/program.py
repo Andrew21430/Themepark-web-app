@@ -1,7 +1,7 @@
 from app import app
 from flask import render_template, abort, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy  # no more boring old SQL for us!
-#from sqlalchemy.orm import joinedload
+# from sqlalchemy.orm import joinedload
 from collections import defaultdict
 from app.forms import RideSearchForm
 from app.forms import ParkSearchForm
@@ -17,33 +17,30 @@ db.init_app(app)
 import app.models as models
 
 
-
-
-
 # basic route
 @app.route('/')
 def root():
     return render_template('home.html', page_title='HOME')
 
 
-@app.route('/park', methods =['GET', 'POST'])
+@app.route('/park', methods=['GET', 'POST'])
 def park():
     form = ParkSearchForm()
-    parks=[]
+    parks = []
     if form.validate_on_submit():
-        search_term=form.search.data
-        parks= models.Park.query.filter(models.Park.name.ilike(f"%{search_term}%")).all()
+        search_term = form.search.data
+        parks = models.Park.query.filter(models.Park.name.ilike(f"%{search_term}%")).all()
     else:
         parks = models.Park.query.all()
-    return render_template('park.html', page_title='PARKS', parks=parks,form=form)
+    return render_template('park.html', page_title='PARKS', parks=parks, form=form)
 
 
-@app.route('/ride', methods = ['GET', 'POST'])
+@app.route('/ride', methods=['GET', 'POST'])
 def ride():
     form = RideSearchForm()
-    rides=[]
+    rides = []
     if form.validate_on_submit():
-        search_term=form.search.data
+        search_term = form.search.data
         rides = models.Ride.query.filter(models.Ride.name.ilike(f"%{search_term}%")).all()
     else:
         rides = models.Ride.query.join(models.Layout).order_by(models.Ride.height.desc()).all()
@@ -76,17 +73,16 @@ def add():
     return "Done"
     # return render_template('add.html', page_title = 'ADD')
 
+
 @app.route('/parkrides')
 def parkrides():
-   #order and join of a many to many without using joined loaded as otherwise I would have to change all of my models tables
-   results = db.session.query(models.Park, models.Ride).join(models.ParkRide, models.Park.id == models.ParkRide.c.park_id).join(models.Ride, models.Ride.id == models.ParkRide.c.ride_id).order_by(models.Park.name).all()
-   #mnake it so that the parks only show once for all the rides
-   grouped_parks = defaultdict(list)
-   for park, ride in results:
-        grouped_parks[park].append(ride)   
-   return render_template('parkrides.html', page_title='PARKRIDES', grouped_parks=grouped_parks)
-
-
+    # order and join of a many to many without using joined loaded as otherwise I would have to change all of my models tables
+    results = db.session.query(models.Park, models.Ride).join(models.ParkRide, models.Park.id == models.ParkRide.c.park_id).join(models.Ride, models.Ride.id == models.ParkRide.c.ride_id).order_by(models.Park.name).all()
+    # make it so that the parks only show once for all the rides
+    grouped_parks = defaultdict(list)
+    for park, ride in results:
+        grouped_parks[park].append(ride)
+    return render_template('parkrides.html', page_title='PARKRIDES', grouped_parks=grouped_parks)
 
 
 app.config['SECRET_KEY'] = 'yoursecretkeyhere'
