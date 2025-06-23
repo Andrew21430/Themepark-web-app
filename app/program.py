@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy  # no more boring old SQL for us!
 #from sqlalchemy.orm import joinedload
 from collections import defaultdict
 from app.forms import RideSearchForm
+from app.forms import ParkSearchForm
 
 import os
 
@@ -25,10 +26,16 @@ def root():
     return render_template('home.html', page_title='HOME')
 
 
-@app.route('/park')
+@app.route('/park', methods =['GET', 'POST'])
 def park():
-    parks = models.Park.query.all()
-    return render_template('park.html', page_title='PARKS', parks=parks)
+    form = ParkSearchForm()
+    parks=[]
+    if form.validate_on_submit():
+        search_term=form.search.data
+        parks= models.Park.query.filter(models.Park.name.ilike(f"%{search_term}%")).all()
+    else:
+        parks = models.Park.query.all()
+    return render_template('park.html', page_title='PARKS', parks=parks,form=form)
 
 
 @app.route('/ride', methods = ['GET', 'POST'])

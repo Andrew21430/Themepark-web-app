@@ -1,5 +1,16 @@
 {% extends 'layout.html' %}
 {% block content %}
+
+
+
+<form method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.search.label }} {{ form.search(size=32) }}
+    {{ form.submit() }}
+</form>
+
+
+
 <main class="twocol-grid">
 {% for park in parks %}
     {# Determine layout direction: 

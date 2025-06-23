@@ -8,3 +8,8 @@ class RideSearchForm(FlaskForm):
     search = StringField("Search Rides", validators=[DataRequired()])
     submit = SubmitField("Search")
 
+
+class ParkSearchForm(FlaskForm):
+    search = StringField("Search Rides", validators=[DataRequired()])
+    submit = SubmitField("Search")
+
