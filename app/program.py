@@ -3,6 +3,7 @@ from flask import render_template, abort, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy  # no more boring old SQL for us!
 #from sqlalchemy.orm import joinedload
 from collections import defaultdict
+from app.forms import RideSearchForm
 
 import os
 
@@ -13,6 +14,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "da
 db.init_app(app)
 
 import app.models as models
+
 
 
 
@@ -29,10 +31,16 @@ def park():
     return render_template('park.html', page_title='PARKS', parks=parks)
 
 
-@app.route('/ride')
+@app.route('/ride', methods = ['GET', 'POST'])
 def ride():
-    rides = models.Ride.query.join(models.Layout).order_by(models.Ride.height.desc()).all()
-    return render_template('ride.html', page_title='RIDES', rides=rides)
+    form = RideSearchForm()
+    rides=[]
+    if form.validate_on_submit():
+        search_term=form.search.data
+        rides = models.Ride.query.filter(models.Ride.name.ilike(f"%{search_term}%")).all()
+    else:
+        rides = models.Ride.query.join(models.Layout).order_by(models.Ride.height.desc()).all()
+    return render_template('ride.html', page_title='RIDES', rides=rides, form=form)
 
 
 @app.route('/manufactuer')
@@ -70,3 +78,8 @@ def parkrides():
    for park, ride in results:
         grouped_parks[park].append(ride)   
    return render_template('parkrides.html', page_title='PARKRIDES', grouped_parks=grouped_parks)
+
+
+
+
+app.config['SECRET_KEY'] = 'yoursecretkeyhere'

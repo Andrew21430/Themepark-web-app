@@ -22,6 +22,12 @@
 #}
 
 
+<form method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.search.label }} {{ form.search(size=32) }}
+    {{ form.submit() }}
+</form>
+
 <main class="twocol-grid">
     {% for ride in rides %}
         {# Determine layout direction: 
