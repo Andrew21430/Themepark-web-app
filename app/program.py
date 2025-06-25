@@ -47,6 +47,14 @@ def ride():
     return render_template('ride.html', page_title='RIDES', rides=rides, form=form)
 
 
+@app.route('/ride/<int:id>')
+def rideid(id):
+    form = RideSearchForm()
+    rides = []
+    rides = models.Ride.query.join(models.Layout).order_by(models.Ride.height.desc()).filter(models.Ride.id == id).first_or_404()
+    return render_template('ride.html', page_title='RIDES', rides=[rides], form=form)
+
+
 @app.route('/manufactuer')
 def manufactuer():
     manufactuers = models.Manufacturer.query.all()

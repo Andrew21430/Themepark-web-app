@@ -71,8 +71,8 @@
                       cloud.style.zIndex = z;
                     
                       // Speed: closer to top = faster
-                      const minDuration = 6;
-                      const maxDuration = 20;
+                      const minDuration = 3;
+                      const maxDuration = 15;
                       const duration = maxDuration - (relativeHeight * (maxDuration - minDuration));
                       cloud.style.animationDuration = `${duration.toFixed(2)}s`;
                     
