@@ -1,4 +1,6 @@
 from app.program import db
+from werkzeug.security import generate_password_hash, check_password_hash
+
 '''
 changed ride type relation ship to be a one to many from a many to many
 
@@ -130,3 +132,19 @@ class Park(db.Model):
     photo = db.Column(db.Text)
 
     rides = db.relationship('Ride', secondary=ParkRide, back_populates='parks')
+
+
+# login tables for flask session
+
+class User(db.Model):
+    __tablename__ = "user"
+    id       = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    pw_hash  = db.Column(db.String(255), nullable=False)
+
+    # helper
+    def set_password(self, password: str):
+        self.pw_hash = generate_password_hash(password)
+
+    def check_password(self, password: str) -> bool:
+        return check_password_hash(self.pw_hash, password)
