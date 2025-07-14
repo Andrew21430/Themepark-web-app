@@ -1,10 +1,12 @@
 from app import app
-from flask import render_template, abort, request, redirect, url_for
+from flask import render_template, abort, request, redirect, url_for, flash, session, g
 from flask_sqlalchemy import SQLAlchemy  # no more boring old SQL for us!
 # from sqlalchemy.orm import joinedload
 from collections import defaultdict
-from app.forms import RideSearchForm
-from app.forms import ParkSearchForm
+from app.forms import RideSearchForm, ParkSearchForm, RegisterForm, LoginForm
+from functools import wraps
+from sqlalchemy.exc import IntegrityError
+
 
 import os
 
@@ -15,6 +17,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "da
 db.init_app(app)
 
 import app.models as models
+from app.models import User 
 
 
 # basic route
@@ -94,3 +97,66 @@ def parkrides():
 
 
 app.config['SECRET_KEY'] = 'yoursecretkeyhere'
+
+
+
+def login_required(view_func):
+    @wraps(view_func)
+    def wrapped(*args, **kwargs):
+        if "user_id" not in session:
+            flash("Please log in first.", "warning")
+            return redirect(url_for("login"))
+        return view_func(*args, **kwargs)
+    return wrapped
+
+# make current user available in templates
+@app.before_request
+def load_logged_in_user():
+    g.user = None
+    if "user_id" in session:
+        g.user = User.query.get(session["user_id"])
+
+
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        try:
+            db.session.commit()
+            flash("Account created – please log in.", "success")
+            return redirect(url_for("login"))
+        except IntegrityError:
+            db.session.rollback()
+            flash("Username already taken.", "danger")
+    return render_template("register.html", form=form)
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user and user.check_password(form.password.data):
+            session.clear()                 # protect against session fixation
+            session["user_id"] = user.id
+            flash("Logged in successfully!", "success")
+            return redirect(url_for("root"))
+        flash("Invalid credentials.", "danger")
+    return render_template("login.html", form=form)
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    flash("You have been logged out.", "info")
+    return redirect(url_for("root"))
+
+
+
+@app.route("/secret")
+@login_required
+def secret():
+    return f"Hello {g.user.username}, this is top‑secret!"

@@ -12,7 +12,6 @@
         
         <!-- The Nav Bar goes here -->
          <nav>
-            <nav>
                 <ul>
                     <li><a href="/">Home</a></li>
                     <li>
@@ -36,7 +35,13 @@
                             <li><a href="/manufactuer">Manufactuers</a></li>
                         </ul>
                     </li>
-            </nav>
+                {% if g.user %}
+                    Logged in as {{ g.user.username }} |
+                    <li><a href="/logout">Logout</a></li>
+                {% else %}
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/register">Register</a></li>
+                {% endif %}
         </nav>
         <main class="hero-grid">
             <div class = "flex">
