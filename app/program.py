@@ -160,3 +160,4 @@ def logout():
 @login_required
 def secret():
     return f"Hello {g.user.username}, this is top‑secret!"
+
