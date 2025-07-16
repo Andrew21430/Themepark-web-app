@@ -1,5 +1,6 @@
 from app.program import db
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 
 '''
 changed ride type relation ship to be a one to many from a many to many
@@ -148,3 +149,33 @@ class User(db.Model):
 
     def check_password(self, password: str) -> bool:
         return check_password_hash(self.pw_hash, password)
+    
+
+class Review(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    
+    # The content of the review
+    content = db.Column(db.Text, nullable=False)
+    
+    # The rating score (e.g. 1–5 stars)
+    rating = db.Column(db.Integer, nullable=False)
+    
+    # Timestamp of the review
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Whether the review is approved (for moderation)
+    approved = db.Column(db.Boolean, default=True)
+
+    # Foreign key to User
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', backref='reviews')
+
+    # Type of item being reviewed: "ride", "park", or "site"
+    item_type = db.Column(db.String(10), nullable=False)
+
+    # ID of the item (ride/park), or null if reviewing the website itself
+    item_id = db.Column(db.Integer, nullable=True)
+    
+    def __repr__(self):
+        return f'<Review {self.id} by User {self.user_id}>'
+    

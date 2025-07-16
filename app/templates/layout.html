@@ -36,8 +36,8 @@
                         </ul>
                     </li>
                 {% if g.user %}
-                    Logged in as {{ g.user.username }} |
                     <li><a href="/logout">Logout</a></li>
+                    <li><a href="/">Logged in as {{ g.user.username }} </a></li>
                 {% else %}
                     <li><a href="/login">Login</a></li>
                     <li><a href="/register">Register</a></li>

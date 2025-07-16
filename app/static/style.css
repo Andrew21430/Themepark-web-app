@@ -75,6 +75,10 @@ footer{
 }
 
 
+#text {
+    color: white;
+}
+
 /* remove any unecciary margins and background colour for the items inside the navbar*/
 ul {
     list-style-type: none;

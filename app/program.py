@@ -6,6 +6,7 @@ from collections import defaultdict
 from app.forms import RideSearchForm, ParkSearchForm, RegisterForm, LoginForm
 from functools import wraps
 from sqlalchemy.exc import IntegrityError
+from werkzeug.security import check_password_hash
 
 
 import os
@@ -140,19 +141,22 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        if user and user.check_password(form.password.data):
-            session.clear()                 # protect against session fixation
+
+        if user and check_password_hash(user.password_hash, form.password.data):
             session["user_id"] = user.id
-            flash("Logged in successfully!", "success")
-            return redirect(url_for("root"))
-        flash("Invalid credentials.", "danger")
+            session["username"] = user.username
+            flash(f"Welcome, {user.username}!", "success")
+            return redirect(url_for("home"))
+        else:
+            flash("Invalid username or password. Please try again.", "danger")
+
     return render_template("login.html", form=form)
 
 @app.route("/logout")
 def logout():
     session.clear()
     flash("You have been logged out.", "info")
-    return redirect(url_for("root"))
+    return redirect(url_for("login"))
 
 
 
