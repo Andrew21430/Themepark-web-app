@@ -138,17 +138,15 @@ class Park(db.Model):
 # login tables for flask session
 
 class User(db.Model):
-    __tablename__ = "user"
-    id       = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    pw_hash  = db.Column(db.String(255), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150), unique=True, nullable=False)
+    password_hash = db.Column(db.String(256), nullable=False)
 
-    # helper
-    def set_password(self, password: str):
-        self.pw_hash = generate_password_hash(password)
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
 
-    def check_password(self, password: str) -> bool:
-        return check_password_hash(self.pw_hash, password)
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
     
 
 class Review(db.Model):

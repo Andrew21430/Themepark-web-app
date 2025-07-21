@@ -136,7 +136,7 @@ def register():
             flash("Username already taken.", "danger")
     return render_template("register.html", form=form)
 
-@app.route("/login", methods=["GET", "POST"])
+@app.route('/login', methods=["GET", "POST"])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -146,17 +146,18 @@ def login():
             session["user_id"] = user.id
             session["username"] = user.username
             flash(f"Welcome, {user.username}!", "success")
-            return redirect(url_for("home"))
+            return redirect(url_for("root"))
         else:
             flash("Invalid username or password. Please try again.", "danger")
+            return redirect(url_for("login"))
 
-    return render_template("login.html", form=form)
+    return render_template("login.html", form=form, page_title="Login")
 
 @app.route("/logout")
 def logout():
     session.clear()
     flash("You have been logged out.", "info")
-    return redirect(url_for("login"))
+    return redirect(url_for("root"))
 
 
 
