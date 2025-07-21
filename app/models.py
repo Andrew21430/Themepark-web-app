@@ -122,7 +122,7 @@ class Ride(db.Model):
     height = db.Column(db.Integer)
 
     parks = db.relationship('Park', secondary=ParkRide, back_populates='rides')
-    reviews = db.relationship('Review', backref='ride', lazy='dynamic')
+    review = db.relationship('Review', backref='ride', lazy='dynamic')
 
 
 class Park(db.Model):
@@ -134,7 +134,7 @@ class Park(db.Model):
     photo = db.Column(db.Text)
 
     rides = db.relationship('Ride', secondary=ParkRide, back_populates='parks')
-    reviews = db.relationship('Review', backref='park', lazy='dynamic')
+    review = db.relationship('Review', backref='park', lazy='dynamic')
 
 
 # login tables for flask session
@@ -158,7 +158,7 @@ class Review(db.Model):
     content = db.Column(db.Text, nullable=False)
     rating = db.Column(db.Integer, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    approved = db.Column(db.Boolean, default=True)
+    approved = db.Column(db.Text, default=True)
 
     # Foreign key to User
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

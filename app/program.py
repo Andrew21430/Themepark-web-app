@@ -3,7 +3,7 @@ from flask import render_template, abort, request, redirect, url_for, flash, ses
 from flask_sqlalchemy import SQLAlchemy  # no more boring old SQL for us!
 # from sqlalchemy.orm import joinedload
 from collections import defaultdict
-from app.forms import RideSearchForm, ParkSearchForm, RegisterForm, LoginForm
+from app.forms import RideSearchForm, ParkSearchForm, RegisterForm, LoginForm, ReviewForm
 from functools import wraps
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash
@@ -166,3 +166,47 @@ def logout():
 def secret():
     return f"Hello {g.user.username}, this is top‑secret!"
 
+
+
+
+
+@app.route('/reviews', methods=["GET", "POST"])
+def review_page():
+    edit_id = request.args.get('edit_id', type=int)
+    editing = False
+    form = ReviewForm()
+
+    if edit_id:
+        review = models.Review.query.get_or_404(edit_id)
+        if review.user_id != session.get('user_id'):
+            abort(403)
+        editing = True
+        if request.method == "GET":
+            form.content.data = review.content
+            form.rating.data = review.rating
+            form.ride_id.data = review.ride_id
+            form.park_id.data = review.park_id
+
+    if form.validate_on_submit():
+        if editing:
+            review.content = form.content.data
+            review.rating = form.rating.data
+            review.ride_id = form.ride_id.data
+            review.park_id = form.park_id.data
+            db.session.commit()
+            flash("Review updated!", "success")
+        else:
+            new_review = models.Review(
+                content=form.content.data,
+                rating=form.rating.data,
+                ride_id=form.ride_id.data or None,
+                park_id=form.park_id.data or None,
+                user_id=session.get("user_id")
+            )
+            db.session.add(new_review)
+            db.session.commit()
+            flash("Review submitted!", "success")
+        return redirect(url_for("review"))
+
+    reviews = models.Review.query.order_by(models.Review.timestamp.desc()).all()
+    return render_template("review.html", form=form, reviews=reviews, editing=editing, page_title="Reviews")
