@@ -122,6 +122,7 @@ class Ride(db.Model):
     height = db.Column(db.Integer)
 
     parks = db.relationship('Park', secondary=ParkRide, back_populates='rides')
+    reviews = db.relationship('Review', backref='ride', lazy='dynamic')
 
 
 class Park(db.Model):
@@ -133,6 +134,7 @@ class Park(db.Model):
     photo = db.Column(db.Text)
 
     rides = db.relationship('Ride', secondary=ParkRide, back_populates='parks')
+    reviews = db.relationship('Review', backref='park', lazy='dynamic')
 
 
 # login tables for flask session
@@ -150,30 +152,24 @@ class User(db.Model):
     
 
 class Review(db.Model):
+    __tablename__ = 'review'
     id = db.Column(db.Integer, primary_key=True)
-    
-    # The content of the review
-    content = db.Column(db.Text, nullable=False)
-    
-    # The rating score (e.g. 1–5 stars)
-    rating = db.Column(db.Integer, nullable=False)
-    
-    # Timestamp of the review
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
-    # Whether the review is approved (for moderation)
+    content = db.Column(db.Text, nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     approved = db.Column(db.Boolean, default=True)
 
     # Foreign key to User
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', backref='reviews')
 
-    # Type of item being reviewed: "ride", "park", or "site"
-    item_type = db.Column(db.String(10), nullable=False)
+    # Foreign keys to Ride or Park. Null if it's a site review.
+    ride_id = db.Column(db.Integer, db.ForeignKey('ride.id'), nullable=True)
+    park_id = db.Column(db.Integer, db.ForeignKey('park.id'), nullable=True)
 
-    # ID of the item (ride/park), or null if reviewing the website itself
-    item_id = db.Column(db.Integer, nullable=True)
-    
+    ride = db.relationship('Ride', backref='reviews')
+    park = db.relationship('Park', backref='reviews')
+
     def __repr__(self):
         return f'<Review {self.id} by User {self.user_id}>'
-    
