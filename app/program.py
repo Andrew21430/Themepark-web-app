@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template, abort, request, redirect, url_for, flash, session, g
+from flask import render_template, abort, request, redirect, url_for, flash, session, g, Flask
 from flask_sqlalchemy import SQLAlchemy  # no more boring old SQL for us!
 # from sqlalchemy.orm import joinedload
 from collections import defaultdict
@@ -7,19 +7,26 @@ from app.forms import RideSearchForm, ParkSearchForm, RegisterForm, LoginForm, R
 from functools import wraps
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash
-
-
-import os
-
-
-basedir = os.path.abspath(os.path.dirname(__file__))
-db = SQLAlchemy()
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "database.db")
-db.init_app(app)
+from flask_wtf import CSRFProtect
+from app.models import db  # Import db directly from models.py
 
 import app.models as models
 from app.models import User 
 
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'dev'
+
+# Setup the database
+import os
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "database.db")
+db.init_app(app)
+
+csrf = CSRFProtect(app)
+
+# Delay importing routes and models until after app is created
+with app.app_context():
+    from app import models  # this is now safe
 
 # basic route
 @app.route('/')
@@ -210,3 +217,6 @@ def review_page():
 
     reviews = models.Review.query.order_by(models.Review.timestamp.desc()).all()
     return render_template("review.html", form=form, reviews=reviews, editing=editing, page_title="Reviews")
+
+if __name__ == "__main__":
+    app.run(debug=True)

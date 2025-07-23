@@ -1,4 +1,6 @@
-from app.program import db
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
@@ -122,7 +124,7 @@ class Ride(db.Model):
     height = db.Column(db.Integer)
 
     parks = db.relationship('Park', secondary=ParkRide, back_populates='rides')
-    review = db.relationship('Review', backref='ride', lazy='dynamic')
+    reviews = db.relationship('Review', back_populates='ride', lazy='dynamic')
 
 
 class Park(db.Model):
@@ -134,7 +136,7 @@ class Park(db.Model):
     photo = db.Column(db.Text)
 
     rides = db.relationship('Ride', secondary=ParkRide, back_populates='parks')
-    review = db.relationship('Review', backref='park', lazy='dynamic')
+    reviews = db.relationship('Review', back_populates='park', lazy='dynamic')
 
 
 # login tables for flask session
@@ -149,7 +151,7 @@ class User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-    
+  
 
 class Review(db.Model):
     __tablename__ = 'review'
@@ -162,14 +164,14 @@ class Review(db.Model):
 
     # Foreign key to User
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User', backref='reviews')
+    users = db.relationship('User', backref='reviews')
 
     # Foreign keys to Ride or Park. Null if it's a site review.
     ride_id = db.Column(db.Integer, db.ForeignKey('ride.id'), nullable=True)
     park_id = db.Column(db.Integer, db.ForeignKey('park.id'), nullable=True)
 
-    ride = db.relationship('Ride', backref='reviews')
-    park = db.relationship('Park', backref='reviews')
+    ride = db.relationship('Ride', back_populates='reviews')
+    park = db.relationship('Park', back_populates='reviews')
 
     def __repr__(self):
         return f'<Review {self.id} by User {self.user_id}>'

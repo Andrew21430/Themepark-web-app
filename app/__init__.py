@@ -9,4 +9,3 @@ csrf = CSRFProtect(app)
 
 from app import program, models
 
-app.run(debug=True)
