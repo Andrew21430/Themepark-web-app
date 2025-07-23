@@ -1,9 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
+db = SQLAlchemy()
 '''
 changed ride type relation ship to be a one to many from a many to many
 
@@ -27,6 +26,7 @@ ParkRide = db.Table('park_ride',
     db.Column('photo', db.Text)
 )
 
+
 class Manufacturer(db.Model):
     __tablename__ = 'manufacturer'
     id = db.Column(db.Integer, primary_key=True)
@@ -34,7 +34,7 @@ class Manufacturer(db.Model):
     description = db.Column(db.Text)
     photo = db.Column(db.Text)
 
-    #ride_types = db.relationship('RideType', secondary=RideTypeManufacturer, back_populates='manufacturers')
+    # ride_types = db.relationship('RideType', secondary=RideTypeManufacturer, back_populates='manufacturers')
     ride_types = db.relationship('RideType', back_populates='manufacturer')
 
 
@@ -46,7 +46,7 @@ class RideType(db.Model):
     track_photo = db.Column(db.Text)
     train_photo = db.Column(db.Text)
     manufacturer_id = db.Column(db.Integer, db.ForeignKey('manufacturer.id'))
-    
+
     manufacturer = db.relationship('Manufacturer', back_populates='ride_types')
     rides = db.relationship('Ride', backref='ride_type')
 
@@ -151,7 +151,7 @@ class User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-  
+
 
 class Review(db.Model):
     __tablename__ = 'review'
