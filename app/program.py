@@ -11,7 +11,7 @@ from flask_wtf import CSRFProtect
 from app.models import db  # Import db directly from models.py
 
 import app.models as models
-from app.models import User 
+from app.models import User
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'dev'
@@ -27,6 +27,7 @@ csrf = CSRFProtect(app)
 # Delay importing routes and models until after app is created
 with app.app_context():
     from app import models  # this is now safe
+
 
 # basic route
 @app.route('/')
@@ -107,7 +108,6 @@ def parkrides():
 app.config['SECRET_KEY'] = 'yoursecretkeyhere'
 
 
-
 def login_required(view_func):
     @wraps(view_func)
     def wrapped(*args, **kwargs):
@@ -117,14 +117,13 @@ def login_required(view_func):
         return view_func(*args, **kwargs)
     return wrapped
 
+
 # make current user available in templates
 @app.before_request
 def load_logged_in_user():
     g.user = None
     if "user_id" in session:
         g.user = User.query.get(session["user_id"])
-
-
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -143,6 +142,7 @@ def register():
             flash("Username already taken.", "danger")
     return render_template("register.html", form=form)
 
+
 @app.route('/login', methods=["GET", "POST"])
 def login():
     form = LoginForm()
@@ -160,6 +160,7 @@ def login():
 
     return render_template("login.html", form=form, page_title="Login")
 
+
 @app.route("/logout")
 def logout():
     session.clear()
@@ -167,14 +168,10 @@ def logout():
     return redirect(url_for("root"))
 
 
-
 @app.route("/secret")
 @login_required
 def secret():
     return f"Hello {g.user.username}, this is top‑secret!"
-
-
-
 
 
 @app.route('/reviews', methods=["GET", "POST"])
@@ -217,6 +214,7 @@ def review_page():
 
     reviews = models.Review.query.order_by(models.Review.timestamp.desc()).all()
     return render_template("review.html", form=form, reviews=reviews, editing=editing, page_title="Reviews")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
