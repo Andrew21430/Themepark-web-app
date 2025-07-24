@@ -179,6 +179,7 @@ def review_page():
     edit_id = request.args.get('edit_id', type=int)
     editing = False
     form = ReviewForm()
+    form.set_choices()
 
     if edit_id:
         review = models.Review.query.get_or_404(edit_id)
@@ -188,32 +189,49 @@ def review_page():
         if request.method == "GET":
             form.content.data = review.content
             form.rating.data = review.rating
-            form.ride_id.data = review.ride_id
-            form.park_id.data = review.park_id
+            form.ride_id.data = review.ride_id or 0  # Match 0 to "--- None ---"
+            form.park_id.data = review.park_id or 0
 
     if form.validate_on_submit():
+        ride_id = form.ride_id.data if form.ride_id.data != 0 else None
+        park_id = form.park_id.data if form.park_id.data != 0 else None
+
         if editing:
             review.content = form.content.data
             review.rating = form.rating.data
-            review.ride_id = form.ride_id.data
-            review.park_id = form.park_id.data
+            review.ride_id = ride_id
+            review.park_id = park_id
             db.session.commit()
             flash("Review updated!", "success")
         else:
             new_review = models.Review(
                 content=form.content.data,
                 rating=form.rating.data,
-                ride_id=form.ride_id.data or None,
-                park_id=form.park_id.data or None,
+                ride_id=ride_id,
+                park_id=park_id,
                 user_id=session.get("user_id")
             )
             db.session.add(new_review)
             db.session.commit()
             flash("Review submitted!", "success")
-        return redirect(url_for("review"))
+        return redirect(url_for("review_page"))
 
     reviews = models.Review.query.order_by(models.Review.timestamp.desc()).all()
     return render_template("review.html", form=form, reviews=reviews, editing=editing, page_title="Reviews")
+
+@app.route('/reviews/delete/<int:review_id>', methods=['POST'])
+def delete_review(review_id):
+    review = models.Review.query.get_or_404(review_id)
+
+    # Make sure user has permission to delete
+    if review.user_id != session.get('user_id'):
+        abort(403)
+
+    db.session.delete(review)
+    db.session.commit()
+    flash("Review deleted!", "success")
+    return redirect(url_for('review_page'))
+
 
 
 if __name__ == "__main__":

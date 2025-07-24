@@ -59,7 +59,7 @@
       <div class="card-body">
         <p class="card-text"><strong>Rating:</strong> {{ review.rating }}</p>
         <p class="card-text">{{ review.content }}</p>
-        <p class="card-text text-muted">By {{ review.user.username }} on {{ review.timestamp.strftime('%Y-%m-%d') }}</p>
+        <p class="card-text text-muted">By {{ review.users.username }} on {{ review.timestamp.strftime('%Y-%m-%d') }}</p>
         {% if review.ride %}<p><strong>Ride:</strong> {{ review.ride.name }}</p>{% endif %}
         {% if review.park %}<p><strong>Park:</strong> {{ review.park.name }}</p>{% endif %}
 
