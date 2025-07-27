@@ -35,13 +35,16 @@
                             <li><a href="/manufactuer">Manufactuers</a></li>
                         </ul>
                     </li>
-                {% if g.user %}
-                    <li><a href="/logout">Logout</a></li>
-                    <li><a href="/">Logged in as {{ g.user.username }} </a></li>
-                {% else %}
-                    <li><a href="/login">Login</a></li>
-                    <li><a href="/register">Register</a></li>
-                {% endif %}
+                    <li><a href="/reviews">Reviews</a></li>
+                    {% if g.user %}
+                        <li><a href="/logout">Logout</a></li>
+                        <li><a href="/">Logged in as {{ g.user.username }} </a></li>
+                    {% else %}
+                        <li><a href="/login">Login</a></li>
+                        <li><a href="/register">Register</a></li>
+                    {% endif %}
+                    
+ 
         </nav>
         <main class="hero-grid">
             <div class = "flex">
