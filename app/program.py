@@ -189,7 +189,7 @@ def review_page():
         if request.method == "GET":
             form.content.data = review.content
             form.rating.data = review.rating
-            form.ride_id.data = review.ride_id or 0  # Match 0 to "--- None ---"
+            form.ride_id.data = review.ride_id or 0 # Match 0 to "--- None ---"
             form.park_id.data = review.park_id or 0
 
     if form.validate_on_submit():
@@ -230,7 +230,7 @@ def delete_review(review_id):
     db.session.delete(review)
     db.session.commit()
     flash("Review deleted!", "success")
-    return redirect(url_for('review_page'))
+    return redirect(url_for('reviews'))
 
 
 
