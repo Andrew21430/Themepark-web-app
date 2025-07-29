@@ -8,4 +8,3 @@ app.config['SECRET_KEY'] = 'dev'
 csrf = CSRFProtect(app)
 
 from app import program, models
-

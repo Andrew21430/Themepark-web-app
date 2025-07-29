@@ -9,6 +9,8 @@ from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash
 from flask_wtf import CSRFProtect
 from app.models import db  # Import db directly from models.py
+from wtforms.validators import ValidationError
+from flask_wtf.csrf import validate_csrf
 
 import app.models as models
 from app.models import User
@@ -221,17 +223,20 @@ def review_page():
 
 @app.route('/reviews/delete/<int:review_id>', methods=['POST'])
 def delete_review(review_id):
+    try:
+        validate_csrf(request.form.get('csrf_token'))
+    except ValidationError:
+        abort(400, description="Invalid CSRF token")
+
     review = models.Review.query.get_or_404(review_id)
 
-    # Make sure user has permission to delete
     if review.user_id != session.get('user_id'):
         abort(403)
 
     db.session.delete(review)
     db.session.commit()
     flash("Review deleted!", "success")
-    return redirect(url_for('reviews'))
-
+    return redirect(url_for("review_page"))
 
 
 if __name__ == "__main__":
