@@ -21,6 +21,9 @@
             {# Even index (0, 2, 4...): Text on left, Image on right #}
             <article>
                 <h1>{{park.name}} </h1> <p>{{park.description}} {{park.location}}</p>
+                <a href="{{ url_for('review_page', park_id=park.id) }}" class="button">
+                    Review {{ park.name }}
+                  </a>
             </article>
             <article>
                 <img class = "widthhalf" src="/static/Images/website/{{park.photo}}">
@@ -32,6 +35,9 @@
             </article>
             <article>
                 <h1>{{park.name}} </h1> <p>{{park.description}} {{park.location}}</p>
+                <a href="{{ url_for('review_page', park_id=park.id) }}" class="button">
+                    Review {{ park.name }}
+                  </a>
             </article>
         {% endif %}
 

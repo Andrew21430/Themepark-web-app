@@ -5,7 +5,7 @@
     {% for park, rides in grouped_parks.items() %}
     <article><h1>{{park.name}}</h1></article>
     <article>
-        <a href="/park">
+        <a href="/park/{{park.id}}">
             <img class = "widthhalf" src="/static/Images/website/{{park.photo}}">
         </a>
     </article>

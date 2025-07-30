@@ -49,6 +49,18 @@ def park():
     return render_template('park.html', page_title='PARKS', parks=parks, form=form)
 
 
+@app.route('/park/<int:id>', methods=['GET', 'POST'])
+def parkid(id):
+    form = ParkSearchForm()
+    parks = []
+    if form.validate_on_submit():
+        search_term = form.search.data
+        parks = models.Park.query.filter(models.Park.name.ilike(f"%{search_term}%")).all()
+    else:
+        parks = models.Park.query.filter(models.Park.id == id).first_or_404()
+    return render_template('park.html', page_title='PARKS', parks=[parks], form=form)
+
+
 @app.route('/ride', methods=['GET', 'POST'])
 def ride():
     form = RideSearchForm()
@@ -180,8 +192,12 @@ def secret():
 def review_page():
     edit_id = request.args.get('edit_id', type=int)
     editing = False
+    park_id_from_query = request.args.get('park_id', type=int)
+
     form = ReviewForm()
     form.set_choices()
+    if park_id_from_query and not edit_id:
+        form.park_id.data = park_id_from_query
 
     if edit_id:
         review = models.Review.query.get_or_404(edit_id)
