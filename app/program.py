@@ -193,11 +193,15 @@ def review_page():
     edit_id = request.args.get('edit_id', type=int)
     editing = False
     park_id_from_query = request.args.get('park_id', type=int)
+    ride_id_from_query = request.args.get('ride_id', type=int)
 
     form = ReviewForm()
     form.set_choices()
     if park_id_from_query and not edit_id:
         form.park_id.data = park_id_from_query
+    
+    if ride_id_from_query and not edit_id:
+        form.ride_id.data = ride_id_from_query
 
     if edit_id:
         review = models.Review.query.get_or_404(edit_id)
