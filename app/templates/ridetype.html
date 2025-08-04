@@ -3,7 +3,7 @@
 <main class="twocol-grid-thrid">
 {% for type in types %}
     <article><img class = "widthhalf" src="/static/Images/website/{{type.track_photo}}"></article>
-    <article><img class = "widthhalf" src="/static/Images/website/{{type.train_photo}}"></article>
+    <article><img class = "widthhalf" src="/static/Images/website/trains/{{type.train_photo}}"></article>
     <article class="gridspan2"><h1>{{type.ride}} by {{type.manufacturer.name}}</h1><p>{{type.description}}</p></article>
 {% endfor %}
 
