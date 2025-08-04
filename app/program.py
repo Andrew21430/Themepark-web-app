@@ -261,7 +261,7 @@ def delete_review(review_id):
 
 
 
-@app.route("/add/park", methods=["GET", "POST"])
+@app.route("/addpark", methods=["GET", "POST"])
 def add_park():
     form = ParkForm()
     if form.validate_on_submit():
@@ -269,19 +269,20 @@ def add_park():
         db.session.add(new_park)
         db.session.commit()
         flash("Park added!", "success")
-        return redirect(url_for("home"))  # Or change to wherever you want
-    return render_template("add_park.html", form=form)
+        return redirect(url_for("root"))  # Or change to wherever you want
+    return render_template("addpark.html", form=form)
 
-@app.route("/add/ride", methods=["GET", "POST"])
+@app.route("/addride", methods=["GET", "POST"])
 def add_ride():
     form = RideForm()
     if form.validate_on_submit():
-        new_ride = Ride(name=form.name.data, thrill_rating=form.thrill_rating.data, park_id=form.park_id.data)
+        new_ride = Ride(name=form.name.data, thrill_level=form.thrill_level.data)
+        new_park = 
         db.session.add(new_ride)
         db.session.commit()
         flash("Ride added!", "success")
-        return redirect(url_for("home"))  # Or wherever you want
-    return render_template("add_ride.html", form=form)
+        return redirect(url_for("root"))  # Or wherever you want
+    return render_template("addride.html", form=form)
 
 if __name__ == "__main__":
     app.run(debug=True)

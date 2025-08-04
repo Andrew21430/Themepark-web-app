@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+{% block content %}
+  <h2>Add a New Ride</h2>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.name.label }} {{ form.name() }}<br>
+    {{ form.thrill_level.label }} {{ form.thrill_level() }}<br>
+    {{ form.park_id.label }} {{ form.park_id() }}<br>
+    {{ form.submit() }}
+  </form>
+{% endblock %}

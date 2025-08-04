@@ -60,6 +60,6 @@ class ParkForm(FlaskForm):
 
 class RideForm(FlaskForm):
     name = StringField("Ride Name", validators=[DataRequired()])
-    thrill_rating = IntegerField("Thrill Rating (1–10)", validators=[DataRequired()])
+    thrill_level = StringField("Thrill level (Low - Extreme)", validators=[DataRequired()])
     park_id = IntegerField("Park ID", validators=[DataRequired()])
     submit = SubmitField("Add Ride")
