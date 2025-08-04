@@ -50,3 +50,16 @@ class ReviewForm(FlaskForm):
         self.park_id.choices = [(0, "--- None ---")] + [
             (park.id, park.name) for park in Park.query.order_by(Park.name).all()
         ]
+
+
+
+class ParkForm(FlaskForm):
+    name = StringField("Park Name", validators=[DataRequired()])
+    location = StringField("Location", validators=[DataRequired()])
+    submit = SubmitField("Add Park")
+
+class RideForm(FlaskForm):
+    name = StringField("Ride Name", validators=[DataRequired()])
+    thrill_rating = IntegerField("Thrill Rating (1–10)", validators=[DataRequired()])
+    park_id = IntegerField("Park ID", validators=[DataRequired()])
+    submit = SubmitField("Add Ride")

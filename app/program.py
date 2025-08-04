@@ -3,7 +3,7 @@ from flask import render_template, abort, request, redirect, url_for, flash, ses
 from flask_sqlalchemy import SQLAlchemy  # no more boring old SQL for us!
 # from sqlalchemy.orm import joinedload
 from collections import defaultdict
-from app.forms import RideSearchForm, ParkSearchForm, RegisterForm, LoginForm, ReviewForm
+from app.forms import RideSearchForm, ParkSearchForm, RegisterForm, LoginForm, ReviewForm, ParkForm, RideForm
 from functools import wraps
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash
@@ -14,6 +14,7 @@ from flask_wtf.csrf import validate_csrf
 
 import app.models as models
 from app.models import User
+from app.models import Park, Ride
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'dev'
@@ -258,6 +259,29 @@ def delete_review(review_id):
     flash("Review deleted!", "success")
     return redirect(url_for("review_page"))
 
+
+
+@app.route("/add/park", methods=["GET", "POST"])
+def add_park():
+    form = ParkForm()
+    if form.validate_on_submit():
+        new_park = Park(name=form.name.data, location=form.location.data)
+        db.session.add(new_park)
+        db.session.commit()
+        flash("Park added!", "success")
+        return redirect(url_for("home"))  # Or change to wherever you want
+    return render_template("add_park.html", form=form)
+
+@app.route("/add/ride", methods=["GET", "POST"])
+def add_ride():
+    form = RideForm()
+    if form.validate_on_submit():
+        new_ride = Ride(name=form.name.data, thrill_rating=form.thrill_rating.data, park_id=form.park_id.data)
+        db.session.add(new_ride)
+        db.session.commit()
+        flash("Ride added!", "success")
+        return redirect(url_for("home"))  # Or wherever you want
+    return render_template("add_ride.html", form=form)
 
 if __name__ == "__main__":
     app.run(debug=True)
