@@ -1,11 +1,26 @@
 {% extends 'layout.html' %}
 {% block content %}
-  <h2>Add a New Ride</h2>
-  <form method="POST">
+
+<h2>Add New Ride</h2>
+
+<form method="POST" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
-    {{ form.name.label }} {{ form.name() }}<br>
-    {{ form.thrill_level.label }} {{ form.thrill_level() }}<br>
-    {{ form.park_id.label }} {{ form.park_id() }}<br>
-    {{ form.submit() }}
-  </form>
+    {% for field in form %}
+        <p>
+            {{ field.label }}<br>
+            {{ field(size=40) if field.type != 'FileField' else field() }}
+        </p>
+    {% endfor %}
+    <!-- <p>{{ form.submit() }}</p>
+    {% if form.errors %}
+        <ul class="error-list">
+            {% for field, errors in form.errors.items() %}
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    {% endif %} -->
+</form>
+
 {% endblock %}

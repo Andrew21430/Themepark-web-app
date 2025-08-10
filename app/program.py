@@ -11,6 +11,8 @@ from flask_wtf import CSRFProtect
 from app.models import db  # Import db directly from models.py
 from wtforms.validators import ValidationError
 from flask_wtf.csrf import validate_csrf
+from werkzeug.utils import secure_filename
+
 
 import app.models as models
 from app.models import User
@@ -30,6 +32,20 @@ csrf = CSRFProtect(app)
 # Delay importing routes and models until after app is created
 with app.app_context():
     from app import models  # this is now safe
+
+UPLOAD_FOLDER = os.path.join(
+    os.path.dirname(__file__), 
+    'static', 
+    'Images', 
+    'website', 
+    'rides'
+)
+
+# Make sure the folder exists
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# Configure Flask to use it
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 # basic route
@@ -70,7 +86,7 @@ def ride():
         search_term = form.search.data
         rides = models.Ride.query.filter(models.Ride.name.ilike(f"%{search_term}%")).all()
     else:
-        rides = models.Ride.query.join(models.Layout).order_by(models.Ride.height.desc()).all()
+        rides = models.Ride.query.join(models.Layout).order_by(models.Ride.Height.desc()).all()
     return render_template('ride.html', page_title='RIDES', rides=rides, form=form)
 
 
@@ -78,7 +94,7 @@ def ride():
 def rideid(id):
     form = RideSearchForm()
     rides = []
-    rides = models.Ride.query.join(models.Layout).order_by(models.Ride.height.desc()).filter(models.Ride.id == id).first_or_404()
+    rides = models.Ride.query.join(models.Layout).order_by(models.Ride.Height.desc()).filter(models.Ride.id == id).first_or_404()
     return render_template('ride.html', page_title='RIDES', rides=[rides], form=form)
 
 
@@ -272,17 +288,38 @@ def add_park():
         return redirect(url_for("root"))  # Or change to wherever you want
     return render_template("addpark.html", form=form)
 
-@app.route("/addride", methods=["GET", "POST"])
+
+@app.route('/addride', methods=['GET', 'POST'])
 def add_ride():
     form = RideForm()
+
     if form.validate_on_submit():
-        new_ride = Ride(name=form.name.data, thrill_level=form.thrill_level.data)
-        new_park = 
+        # Create new Ride instance
+        new_ride = models.Ride(
+            name=form.name.data,
+            ride_type_id=form.ride_type_id.data,
+            layout_id=form.layout_id.data,
+            theme_id=form.theme_id.data,
+            launch_type_id=form.launch_type_id.data,
+            thrill_level=form.thrill_level.data,
+            restriction_id=form.restriction_id.data,
+            constructor_id=form.constructor_id.data,
+            Height=form.Height.data
+        )
+
+        # Handle photo upload
+        if form.photo.data:
+            filename = secure_filename(form.photo.data.filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            form.photo.data.save(filepath)
+            new_ride.photo = f'uploads/{filename}'  # store relative path
+
         db.session.add(new_ride)
         db.session.commit()
-        flash("Ride added!", "success")
-        return redirect(url_for("root"))  # Or wherever you want
-    return render_template("addride.html", form=form)
+        flash("New ride added successfully!", "success")
+        return redirect(url_for('ride'))
+
+    return render_template('addride.html', form=form, page_title="Add Ride")
 
 if __name__ == "__main__":
     app.run(debug=True)

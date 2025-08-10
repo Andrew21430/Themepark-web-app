@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import TextAreaField, IntegerField, StringField, SubmitField, PasswordField, SelectField
 from wtforms.validators import DataRequired, Length, EqualTo, NumberRange, Optional
 from app.models import Ride, Park
+from flask_wtf.file import FileField, FileAllowed
 
 
 
@@ -58,8 +59,17 @@ class ParkForm(FlaskForm):
     location = StringField("Location", validators=[DataRequired()])
     submit = SubmitField("Add Park")
 
+
 class RideForm(FlaskForm):
-    name = StringField("Ride Name", validators=[DataRequired()])
-    thrill_level = StringField("Thrill level (Low - Extreme)", validators=[DataRequired()])
-    park_id = IntegerField("Park ID", validators=[DataRequired()])
-    submit = SubmitField("Add Ride")
+    name = StringField('Name', validators=[DataRequired()])
+    ride_type_id = IntegerField('Ride Type ID', validators=[DataRequired()])
+    layout_id = IntegerField('Layout ID', validators=[DataRequired()])
+    theme_id = IntegerField('Theme ID', validators=[DataRequired()])
+    launch_type_id = IntegerField('Launch Type ID', validators=[DataRequired()])
+    #park_id = IntegerField('Park ID', validators=[DataRequired()])
+    thrill_level = StringField('Thrill Level', validators=[DataRequired()])
+    restriction_id = IntegerField('Restriction ID', validators=[DataRequired()])
+    constructor_id = IntegerField('Constructor ID', validators=[DataRequired()])
+    photo = FileField('Photo', validators=[Optional(), FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')])
+    Height = IntegerField('Height (m)', validators=[Optional()])
+    submit = SubmitField('Save')
