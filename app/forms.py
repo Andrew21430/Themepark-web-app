@@ -19,6 +19,9 @@ class ParkSearchForm(FlaskForm):
 
 
 class RegisterForm(FlaskForm):
+    # This form is used for user registration
+    # It includes fields for username, password, and confirmation
+    # and uses validators to ensure the inputs are valid
     username = StringField("Username", validators=[DataRequired(), Length(min=3, max=80)])
     password = PasswordField("Password", validators=[DataRequired(), Length(min=6)])
     confirm  = PasswordField("Confirm",  validators=[DataRequired(), EqualTo('password')])
@@ -61,6 +64,8 @@ class ParkForm(FlaskForm):
 
 
 class RideForm(FlaskForm):
+    # This form is used for adding or editing a ride
+    # It includes fields for ride details such as name, type, layout, theme, launch type, thrill level, restrictions, constructor, and photo
     name = StringField('Name', validators=[DataRequired()])
     ride_type_id = IntegerField('Ride Type ID', validators=[DataRequired()])
     layout_id = IntegerField('Layout ID', validators=[DataRequired()])
