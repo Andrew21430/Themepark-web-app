@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
+
 db = SQLAlchemy()
 '''
 changed ride type relation ship to be a one to many from a many to many

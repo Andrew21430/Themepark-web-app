@@ -1,7 +1,6 @@
 from app import app
 from flask import render_template, abort, request, redirect, url_for, flash, session, g, Flask
 from flask_sqlalchemy import SQLAlchemy  # no more boring old SQL for us!
-# from sqlalchemy.orm import joinedload
 from collections import defaultdict
 from app.forms import RideSearchForm, ParkSearchForm, RegisterForm, LoginForm, ReviewForm, ParkForm, RideForm
 from functools import wraps
@@ -15,8 +14,8 @@ from werkzeug.utils import secure_filename
 
 
 import app.models as models
-from app.models import User
-from app.models import Park, Ride
+from app.models import User, Park, Ride
+# Initialize Flask app and database
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'dev'
@@ -56,10 +55,13 @@ def root():
 
 @app.route('/park', methods=['GET', 'POST'])
 def park():
+    # Initialize the search form
     form = ParkSearchForm()
     parks = []
+    # Check if the form is submitted and valid
     if form.validate_on_submit():
         search_term = form.search.data
+        # Query the database for parks matching the search term
         parks = models.Park.query.filter(models.Park.name.ilike(f"%{search_term}%")).all()
     else:
         parks = models.Park.query.all()
@@ -100,6 +102,7 @@ def rideid(id):
 
 @app.route('/manufactuer')
 def manufactuer():
+    # Query all manufacturers from the database
     manufactuers = models.Manufacturer.query.all()
     return render_template('manufactuer.html', page_title='MANUFACTUER', manufactuers=manufactuers)
 
@@ -112,17 +115,16 @@ def rideelements():
 
 @app.route('/ridetype')
 def ridetype():
-    # types = models.RideType.query.options(db.joinedload(models.RideType.manufacturers)).all()
-    # joinedload is used to join many to many tables
+    # Query all ride types and join with manufacturers
     types = models.RideType.query.join(models.Manufacturer).all()
     return render_template('ridetype.html', page_title='RIDETYPES', types=types)
 
 
-@app.route('/add', methods=['GET', 'POST'])
-def add():
-    print(request.args.get('ROR2'))
-    return "Done"
-    # return render_template('add.html', page_title = 'ADD')
+@app.route('/launchtype')
+def launchtype():
+    # Query all launch types
+    launch_types = models.LaunchType.query.all()
+    return render_template('launchtype.html', page_title='LAUNCHTYPES', launch_types=launch_types)
 
 
 @app.route('/parkrides')
@@ -138,11 +140,13 @@ def parkrides():
 
 app.config['SECRET_KEY'] = 'yoursecretkeyhere'
 
-
+# Decorator to require login for certain views
 def login_required(view_func):
     @wraps(view_func)
+    # This decorator checks if the user is logged in before allowing access to the view
     def wrapped(*args, **kwargs):
         if "user_id" not in session:
+            # User is not logged in, redirect to login page
             flash("Please log in first.", "warning")
             return redirect(url_for("login"))
         return view_func(*args, **kwargs)
@@ -152,6 +156,7 @@ def login_required(view_func):
 # make current user available in templates
 @app.before_request
 def load_logged_in_user():
+    # This function runs before each request to set the current user in the global context
     g.user = None
     if "user_id" in session:
         g.user = User.query.get(session["user_id"])
@@ -159,16 +164,21 @@ def load_logged_in_user():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    # This route handles user registration
     form = RegisterForm()
     if form.validate_on_submit():
+        # Check if the username already exists
         user = User(username=form.username.data)
         user.set_password(form.password.data)
         db.session.add(user)
         try:
+            # Commit the new user to the database
             db.session.commit()
             flash("Account created – please log in.", "success")
             return redirect(url_for("login"))
+        # Handle the case where the username is already taken
         except IntegrityError:
+            # Rollback the session to avoid committing the error
             db.session.rollback()
             flash("Username already taken.", "danger")
     return render_template("register.html", form=form)
@@ -176,16 +186,20 @@ def register():
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
+    # This route handles user login
     form = LoginForm()
     if form.validate_on_submit():
+        # Check if the user exists and verify the password
         user = User.query.filter_by(username=form.username.data).first()
 
         if user and check_password_hash(user.password_hash, form.password.data):
+            # User exists and password is correct, log them in
             session["user_id"] = user.id
             session["username"] = user.username
             flash(f"Welcome, {user.username}!", "success")
             return redirect(url_for("root"))
         else:
+            # Invalid login attempt
             flash("Invalid username or password. Please try again.", "danger")
             return redirect(url_for("login"))
 
@@ -194,6 +208,7 @@ def login():
 
 @app.route("/logout")
 def logout():
+    # This route handles user logout
     session.clear()
     flash("You have been logged out.", "info")
     return redirect(url_for("root"))
@@ -207,35 +222,44 @@ def secret():
 
 @app.route('/reviews', methods=["GET", "POST"])
 def review_page():
+    # This route handles both displaying and submitting reviews
+    # Check for CSRF token validation
     edit_id = request.args.get('edit_id', type=int)
     editing = False
+    # If an edit_id is provided, we are editing an existing review
     park_id_from_query = request.args.get('park_id', type=int)
     ride_id_from_query = request.args.get('ride_id', type=int)
 
     form = ReviewForm()
+    # Set choices for the form fields
     form.set_choices()
+    # If park_id or ride_id is provided in the query string, set it in the form
     if park_id_from_query and not edit_id:
         form.park_id.data = park_id_from_query
 
     if ride_id_from_query and not edit_id:
         form.ride_id.data = ride_id_from_query
-
+    # If edit_id is provided, we are editing an existing review
     if edit_id:
         review = models.Review.query.get_or_404(edit_id)
+        # Check if the current user is the owner of the review
         if review.user_id != session.get('user_id'):
             abort(403)
         editing = True
         if request.method == "GET":
+            # Populate the form with the existing review data
             form.content.data = review.content
             form.rating.data = review.rating
             form.ride_id.data = review.ride_id or 0 # Match 0 to "--- None ---"
             form.park_id.data = review.park_id or 0
 
     if form.validate_on_submit():
+        #Handle form submission for both creating and editing reviews
         ride_id = form.ride_id.data if form.ride_id.data != 0 else None
         park_id = form.park_id.data if form.park_id.data != 0 else None
 
         if editing:
+            # Update the existing review
             review.content = form.content.data
             review.rating = form.rating.data
             review.ride_id = ride_id
@@ -243,6 +267,7 @@ def review_page():
             db.session.commit()
             flash("Review updated!", "success")
         else:
+            # Create a new review
             new_review = models.Review(
                 content=form.content.data,
                 rating=form.rating.data,
@@ -260,16 +285,19 @@ def review_page():
 
 @app.route('/reviews/delete/<int:review_id>', methods=['POST'])
 def delete_review(review_id):
+    # This route handles deleting a review
+    # Check for CSRF token validation
     try:
         validate_csrf(request.form.get('csrf_token'))
     except ValidationError:
         abort(400, description="Invalid CSRF token")
-
+    # Get the review by ID
     review = models.Review.query.get_or_404(review_id)
 
+    # Check if the current user is the owner of the review
     if review.user_id != session.get('user_id'):
         abort(403)
-
+    # Delete the review
     db.session.delete(review)
     db.session.commit()
     flash("Review deleted!", "success")
@@ -279,13 +307,16 @@ def delete_review(review_id):
 
 @app.route("/addpark", methods=["GET", "POST"])
 def add_park():
+    # This route handles adding a new park
     form = ParkForm()
+    # Check if the form is submitted and valid
     if form.validate_on_submit():
+        # Create new Park instance
         new_park = Park(name=form.name.data, location=form.location.data)
         db.session.add(new_park)
         db.session.commit()
         flash("Park added!", "success")
-        return redirect(url_for("root"))  # Or change to wherever you want
+        return redirect(url_for("root"))  
     return render_template("addpark.html", form=form)
 
 
