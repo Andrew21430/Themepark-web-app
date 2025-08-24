@@ -34,10 +34,10 @@ with app.app_context():
     from app import models  # this is now safe
 
 UPLOAD_FOLDER = os.path.join(
-    os.path.dirname(__file__), 
-    'static', 
-    'Images', 
-    'website', 
+    os.path.dirname(__file__),
+    'static',
+    'Images',
+    'website',
     'rides'
 )
 
@@ -216,7 +216,7 @@ def review_page():
     form.set_choices()
     if park_id_from_query and not edit_id:
         form.park_id.data = park_id_from_query
-    
+
     if ride_id_from_query and not edit_id:
         form.ride_id.data = ride_id_from_query
 
@@ -312,7 +312,7 @@ def add_ride():
             filename = secure_filename(form.photo.data.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             form.photo.data.save(filepath)
-            new_ride.photo = f'uploads/{filename}'  # store relative path
+            new_ride.photo = f'{filename}'  # store relative path
 
         db.session.add(new_ride)
         db.session.commit()
