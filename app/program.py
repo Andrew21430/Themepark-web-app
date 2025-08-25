@@ -335,7 +335,8 @@ def add_ride():
             thrill_level=form.thrill_level.data,
             restriction_id=form.restriction_id.data,
             constructor_id=form.constructor_id.data,
-            Height=form.Height.data
+            park_id=form.park_id.data,   # include park_id now
+            height=form.Height.data
         )
 
         # Handle photo upload
@@ -343,7 +344,7 @@ def add_ride():
             filename = secure_filename(form.photo.data.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             form.photo.data.save(filepath)
-            new_ride.photo = f'{filename}'  # store relative path
+            new_ride.photo = f'Images/website/rides/{filename}'  # relative path for static
 
         db.session.add(new_ride)
         db.session.commit()

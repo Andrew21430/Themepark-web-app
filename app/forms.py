@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import TextAreaField, IntegerField, StringField, SubmitField, PasswordField, SelectField
 from wtforms.validators import DataRequired, Length, EqualTo, NumberRange, Optional
-from app.models import Ride, Park
+from app.models import Ride, Park, RideType, Layout, Theme, LaunchType, Restriction, Constructor, Park  # adjust imports
 from flask_wtf.file import FileField, FileAllowed
 
 
@@ -64,17 +64,30 @@ class ParkForm(FlaskForm):
 
 
 class RideForm(FlaskForm):
-    # This form is used for adding or editing a ride
-    # It includes fields for ride details such as name, type, layout, theme, launch type, thrill level, restrictions, constructor, and photo
     name = StringField('Name', validators=[DataRequired()])
-    ride_type_id = IntegerField('Ride Type ID', validators=[DataRequired()])
-    layout_id = IntegerField('Layout ID', validators=[DataRequired()])
-    theme_id = IntegerField('Theme ID', validators=[DataRequired()])
-    launch_type_id = IntegerField('Launch Type ID', validators=[DataRequired()])
-    #park_id = IntegerField('Park ID', validators=[DataRequired()])
+    
+    ride_type_id = SelectField('Ride Type', coerce=int, validators=[DataRequired()])
+    layout_id = SelectField('Layout', coerce=int, validators=[DataRequired()])
+    theme_id = SelectField('Theme', coerce=int, validators=[DataRequired()])
+    launch_type_id = SelectField('Launch Type', coerce=int, validators=[DataRequired()])
+    park_id = SelectField('Park', coerce=int, validators=[DataRequired()])
+    restriction_id = SelectField('Restriction', coerce=int, validators=[DataRequired()])
+    constructor_id = SelectField('Constructor', coerce=int, validators=[DataRequired()])
+
     thrill_level = StringField('Thrill Level', validators=[DataRequired()])
-    restriction_id = IntegerField('Restriction ID', validators=[DataRequired()])
-    constructor_id = IntegerField('Constructor ID', validators=[DataRequired()])
     photo = FileField('Photo', validators=[Optional(), FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')])
     Height = IntegerField('Height (m)', validators=[Optional()])
+    
     submit = SubmitField('Save')
+
+    def __init__(self, *args, **kwargs):
+        super(RideForm, self).__init__(*args, **kwargs)
+        # Populate dropdown choices dynamically from DB
+        self.ride_type_id.choices = [(r.id, r.ride) for r in RideType.query.all()]
+        self.layout_id.choices = [(l.id, l.description) for l in Layout.query.all()]
+        self.theme_id.choices = [(t.id, t.name) for t in Theme.query.all()]
+        self.launch_type_id.choices = [(lt.id, lt.name) for lt in LaunchType.query.all()]
+        self.park_id.choices = [(p.id, p.name) for p in Park.query.all()]
+        self.restriction_id.choices = [(res.id, res.reason) for res in Restriction.query.all()]
+        self.constructor_id.choices = [(c.id, c.name) for c in Constructor.query.all()]
+
