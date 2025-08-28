@@ -1,22 +1,10 @@
 {% extends 'layout.html' %}
 {% block content %}
-<p>TEST</p>
-<h1>TEST TEST TEST</h1>
-<p>Amusment Industries, a fake company made by a Year 13 student</p>
-{#
-    <form action="/add">
-    <input type="text" nmae="ROR2"><br>
-    <input type="submit" value="Submit">
-</form>
-<br><br><br><br><br><br><br><br><br><br><br><br>
-<form action="/add">
-    <label for="fname">First name:</label><br>
-    <input type="text" id="fname" value="John"><br><br>
-    <input type="submit" value="Submit">
-</form>
-#}
 
+<h1>Amusment Industries</h1> 
+<p>A fake company made by a Year 13 student</p>
 
+<!-- Flash messages -->
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     {% for category, message in messages %}
