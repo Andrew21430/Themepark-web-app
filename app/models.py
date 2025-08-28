@@ -66,7 +66,7 @@ class LaunchType(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text)
     description = db.Column(db.Text)
-    lift_launch = db.Column(db.Integer)  # 0 = Lift, 1 = Launch
+    lift_launch = db.Column(db.Integer)
 
     rides = db.relationship('Ride', backref='launch_type')
 
