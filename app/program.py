@@ -1,6 +1,6 @@
 from app import app
 from flask import render_template, abort, request, redirect, url_for, flash, session, g, Flask
-from flask_sqlalchemy import SQLAlchemy  # no more boring old SQL for us!
+# from flask_sqlalchemy import SQLAlchemy  # no more boring old SQL for us!
 from collections import defaultdict
 from app.forms import RideSearchForm, ParkSearchForm, RegisterForm, LoginForm, ReviewForm, ParkForm, RideForm
 from functools import wraps
@@ -14,7 +14,7 @@ from werkzeug.utils import secure_filename
 
 
 import app.models as models
-from app.models import User, Park, Ride
+from app.models import User, Park  # Ride
 # Initialize Flask app and database
 
 app = Flask(__name__)

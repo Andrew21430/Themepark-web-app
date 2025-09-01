@@ -21,10 +21,9 @@ RideElementsLayout = db.Table('rideelements_layout',
 
 # Association table for many-to-many relationship between Park and Ride
 ParkRide = db.Table('park_ride',
-    db.Column('park_id', db.Integer, db.ForeignKey('park.id')),
-    db.Column('ride_id', db.Integer, db.ForeignKey('ride.id')),
-    db.Column('photo', db.Text)
-)
+                    db.Column('park_id', db.Integer, db.ForeignKey('park.id')),
+                    db.Column('ride_id', db.Integer, db.ForeignKey('ride.id')),
+                    db.Column('photo', db.Text))
 
 
 class Manufacturer(db.Model):
