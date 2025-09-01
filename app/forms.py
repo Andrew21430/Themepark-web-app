@@ -1,10 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import TextAreaField, IntegerField, StringField, SubmitField, PasswordField, SelectField
 from wtforms.validators import DataRequired, Length, EqualTo, NumberRange, Optional
-from app.models import Ride, Park, RideType, Layout, Theme, LaunchType, Restriction, Constructor, Park  # adjust imports
+from app.models import Ride, Park, RideType, Layout, Theme, LaunchType, Restriction, Constructor  # adjust imports
 from flask_wtf.file import FileField, FileAllowed
-
-
 
 
 class RideSearchForm(FlaskForm):
@@ -17,21 +15,20 @@ class ParkSearchForm(FlaskForm):
     submit = SubmitField("Search")
 
 
-
 class RegisterForm(FlaskForm):
     # This form is used for user registration
     # It includes fields for username, password, and confirmation
     # and uses validators to ensure the inputs are valid
     username = StringField("Username", validators=[DataRequired(), Length(min=3, max=80)])
     password = PasswordField("Password", validators=[DataRequired(), Length(min=6)])
-    confirm  = PasswordField("Confirm",  validators=[DataRequired(), EqualTo('password')])
-    submit   = SubmitField("Register")
+    confirm = PasswordField("Confirm",  validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField("Register")
+
 
 class LoginForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
-    submit   = SubmitField("Login")
-
+    submit = SubmitField("Login")
 
 
 class ReviewForm(FlaskForm):
@@ -56,7 +53,6 @@ class ReviewForm(FlaskForm):
         ]
 
 
-
 class ParkForm(FlaskForm):
     name = StringField("Park Name", validators=[DataRequired()])
     location = StringField("Location", validators=[DataRequired()])
@@ -65,7 +61,6 @@ class ParkForm(FlaskForm):
 
 class RideForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
-    
     ride_type_id = SelectField('Ride Type', coerce=int, validators=[DataRequired()])
     layout_id = SelectField('Layout', coerce=int, validators=[DataRequired()])
     theme_id = SelectField('Theme', coerce=int, validators=[DataRequired()])
@@ -84,7 +79,7 @@ class RideForm(FlaskForm):
         super(RideForm, self).__init__(*args, **kwargs)
         # Populate dropdown choices dynamically from DB
         self.ride_type_id.choices = [(r.id, r.ride) for r in RideType.query.all()]
-        self.layout_id.choices = [(l.id, l.description) for l in Layout.query.all()]
+        self.layout_id.choices = [(k.id, k.description) for k in Layout.query.all()]
         self.theme_id.choices = [(t.id, t.name) for t in Theme.query.all()]
         self.launch_type_id.choices = [(lt.id, lt.name) for lt in LaunchType.query.all()]
         self.park_id.choices = [(p.id, p.name) for p in Park.query.all()]

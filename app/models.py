@@ -15,10 +15,9 @@ RideTypeManufacturer = db.Table('RideType_Manufacturer',
 '''
 # Association table for ride elements and layouts
 RideElementsLayout = db.Table('rideelements_layout',
-    db.Column('ride_elements_id', db.Integer, db.ForeignKey('ride_elements.id')),
-    db.Column('layout_id', db.Integer, db.ForeignKey('layout.id')),
-    db.Column('count', db.Integer)
-)
+                              db.Column('ride_elements_id', db.Integer, db.ForeignKey('ride_elements.id')),
+                              db.Column('layout_id', db.Integer, db.ForeignKey('layout.id')),
+                              db.Column('count', db.Integer))
 
 # Association table for many-to-many relationship between Park and Ride
 ParkRide = db.Table('park_ride',

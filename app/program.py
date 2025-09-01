@@ -140,6 +140,7 @@ def parkrides():
 
 app.config['SECRET_KEY'] = 'yoursecretkeyhere'
 
+
 # Decorator to require login for certain views
 def login_required(view_func):
     @wraps(view_func)
@@ -250,11 +251,11 @@ def review_page():
             # Populate the form with the existing review data
             form.content.data = review.content
             form.rating.data = review.rating
-            form.ride_id.data = review.ride_id or 0 # Match 0 to "--- None ---"
+            form.ride_id.data = review.ride_id or 0  # Match 0 to "--- None ---"
             form.park_id.data = review.park_id or 0
 
     if form.validate_on_submit():
-        #Handle form submission for both creating and editing reviews
+        # Handle form submission for both creating and editing reviews
         ride_id = form.ride_id.data if form.ride_id.data != 0 else None
         park_id = form.park_id.data if form.park_id.data != 0 else None
 
@@ -283,6 +284,7 @@ def review_page():
     reviews = models.Review.query.order_by(models.Review.timestamp.desc()).all()
     return render_template("review.html", form=form, reviews=reviews, editing=editing, page_title="Reviews")
 
+
 @app.route('/reviews/delete/<int:review_id>', methods=['POST'])
 def delete_review(review_id):
     # This route handles deleting a review
@@ -304,7 +306,6 @@ def delete_review(review_id):
     return redirect(url_for("review_page"))
 
 
-
 @app.route("/addpark", methods=["GET", "POST"])
 def add_park():
     # This route handles adding a new park
@@ -316,7 +317,7 @@ def add_park():
         db.session.add(new_park)
         db.session.commit()
         flash("Park added!", "success")
-        return redirect(url_for("root"))  
+        return redirect(url_for("root"))
     return render_template("addpark.html", form=form)
 
 
@@ -352,6 +353,7 @@ def add_ride():
         return redirect(url_for('ride'))
 
     return render_template('addride.html', form=form, page_title="Add Ride")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
