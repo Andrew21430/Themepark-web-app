@@ -352,5 +352,13 @@ def add_ride():
     return render_template('addride.html', form=form, page_title="Add Ride")
 
 
+
+# error 404 page
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)
