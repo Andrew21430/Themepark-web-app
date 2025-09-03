@@ -318,12 +318,12 @@ def add_park():
     return render_template("addpark.html", form=form)
 
 
+
 @app.route('/addride', methods=['GET', 'POST'])
 def add_ride():
     form = RideForm()
-
     if form.validate_on_submit():
-        # Create new Ride instance
+        # Create Ride without park_id
         new_ride = models.Ride(
             name=form.name.data,
             ride_type_id=form.ride_type_id.data,
@@ -333,8 +333,7 @@ def add_ride():
             thrill_level=form.thrill_level.data,
             restriction_id=form.restriction_id.data,
             constructor_id=form.constructor_id.data,
-            park_id=form.park_id.data,   # include park_id now
-            height=form.Height.data
+            Height=form.Height.data
         )
 
         # Handle photo upload
@@ -342,15 +341,22 @@ def add_ride():
             filename = secure_filename(form.photo.data.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             form.photo.data.save(filepath)
-            new_ride.photo = f'Images/website/rides/{filename}'  # relative path for static
+            new_ride.photo = f'Images/website/rides/{filename}'
 
+        # Add the new ride to the DB first
         db.session.add(new_ride)
         db.session.commit()
+
+        # Now associate the ride with the selected park
+        selected_park = models.Park.query.get(form.park_id.data)
+        if selected_park:
+            new_ride.parks.append(selected_park)
+            db.session.commit()
+
         flash("New ride added successfully!", "success")
         return redirect(url_for('ride'))
 
-    return render_template('addride.html', form=form, page_title="Add Ride")
-
+    return render_template('addride.html', form=form)
 
 
 # error 404 page
