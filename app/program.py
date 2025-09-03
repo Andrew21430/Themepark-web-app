@@ -1,7 +1,7 @@
 from app import app
 from flask import render_template, abort, request, redirect, url_for, flash, session, g, Flask
 # from flask_sqlalchemy import SQLAlchemy  # no more boring old SQL for us!
-from collections import defaultdict
+# from collections import defaultdict
 from app.forms import RideSearchForm, ParkSearchForm, RegisterForm, LoginForm, ReviewForm, ParkForm, RideForm
 from functools import wraps
 from sqlalchemy.exc import IntegrityError
@@ -129,12 +129,9 @@ def launchtype():
 
 @app.route('/parkrides')
 def parkrides():
-    # order and join of a many to many without using joined loaded as otherwise I would have to change all of my models tables
-    results = db.session.query(models.Park, models.Ride).join(models.ParkRide, models.Park.id == models.ParkRide.c.park_id).join(models.Ride, models.Ride.id == models.ParkRide.c.ride_id).order_by(models.Park.name).all()
-    # make it so that the parks only show once for all the rides
-    grouped_parks = defaultdict(list)
-    for park, ride in results:
-        grouped_parks[park].append(ride)
+    parks = models.Park.query.order_by(models.Park.name).all()
+    # Dictionary of parks and their rides
+    grouped_parks = {park: park.rides for park in parks}
     return render_template('parkrides.html', page_title='PARKRIDES', grouped_parks=grouped_parks)
 
 

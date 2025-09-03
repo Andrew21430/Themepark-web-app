@@ -1,41 +1,35 @@
 {% extends 'layout.html' %}
 {% block content %}
-
 <main class="twocol-grid">
     {% for park, rides in grouped_parks.items() %}
     <article><h1>{{park.name}}</h1></article>
     <article>
         <a href="/park/{{park.id}}">
-            <img class = "widthhalf" src="/static/Images/website/{{park.photo}}">
+            <img class="widthhalf" src="/static/Images/website/{{park.photo}}">
         </a>
     </article>
-            {% for ride in rides %}
-                {# Determine layout direction: 
-                    If index is even (0, 2, 4...), show image on the right.
-                    If index is odd (1, 3, 5...), show image on the left. #}
-                {% set flipped = loop.index0 is even %}
-                    {% if flipped %}
-                        {# Even index (0, 2, 4...): Text on left, Image on right #}
-                        <article>
-                            <h1>{{ride.name}} {{ride.thrill_level}}</h1>  
-                        </article>
-                        <article>
-                            <a href="ride/{{ride.id}}">
-                                <img class = "widthhalf" src="/static/Images/website/rides/{{ride.photo}}">
-                            </a>
-                        </article>
-                    {% else %}
-                        {# Odd index (1, 3, 5...): Image on left, Text on right #}
-                        <article>
-                            <a href="ride">
-                                <img class = "widthhalf" src="/static/Images/website/rides/{{ride.photo}}">
-                            </a>
-                        </article>
-                        <article>
-                            <h1>{{ride.name}} {{ride.thrill_level}}</h1>
-                        </article>
-                    {% endif %}
-            {% endfor %}
+        {% for ride in rides %}
+            {% set flipped = loop.index0 is even %}
+            {% if flipped %}
+                <article>
+                    <h1>{{ride.name}} {{ride.thrill_level}}</h1>  
+                </article>
+                <article>
+                    <a href="/ride/{{ride.id}}">
+                        <img class="widthhalf" src="/static/Images/website/rides/{{ride.photo}}">
+                    </a>
+                </article>
+            {% else %}
+                <article>
+                    <a href="/ride/{{ride.id}}">
+                        <img class="widthhalf" src="/static/Images/website/rides/{{ride.photo}}">
+                    </a>
+                </article>
+                <article>
+                    <h1>{{ride.name}} {{ride.thrill_level}}</h1>
+                </article>
+            {% endif %}
         {% endfor %}
+    {% endfor %}
 </main>
 {% endblock %}
