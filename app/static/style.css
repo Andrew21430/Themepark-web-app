@@ -568,7 +568,7 @@ p:hover{
 
 .height-scale-container {
     position: sticky;
-    top: 120px; /* below nav, adjust as needed */
+    top: 150px; /* below nav */
     align-self: flex-start;
     width: 90px;
     height: 340px;
