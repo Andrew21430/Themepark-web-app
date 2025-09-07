@@ -6,10 +6,10 @@
     <!-- Height scale -->
     <div class="height-scale-container">
         <div class="height-scale-bg">
-            <span class="height-scale-label">Height</span>
+            <span class="height-scale-label">HEIGHT</span>
             <span id="height-scale-value" class="height-scale-value">--</span>
         </div>
-        <span style="font-size:1em;color:#444;">metres</span>
+        <span style="font-size:.98em;color:#377ab7;letter-spacing:1px;margin-top:0.1em;opacity:0.76;font-family:'Quintessential'">m</span>
     </div>
 
     <div style="flex:1">
@@ -62,14 +62,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 closest = article;
             }
         });
-        // Remove highlight
-        articles.forEach(a => a.classList.remove('ride-highlight'));
         if (closest) {
-            closest.classList.add('ride-highlight');
             document.getElementById('height-scale-value').textContent = closest.getAttribute('data-ride-height') || '--';
         }
     }
-    // Run on scroll and on load
     window.addEventListener('scroll', updateHeightScale);
     window.addEventListener('resize', updateHeightScale);
     updateHeightScale();
