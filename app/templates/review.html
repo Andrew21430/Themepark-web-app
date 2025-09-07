@@ -2,83 +2,70 @@
 {% block content %}
 <div class="container mt-4">
 
-  <h2>{{ page_title }}</h2>
-
-  <!-- Flash messages -->
-  <!-- {% with messages = get_flashed_messages(with_categories=true) %}
-    {% for category, message in messages %}
-      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-        {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    {% endfor %}
-  {% endwith %} -->
+  <h2 class="review-header">{{ page_title }}</h2>
 
   {% if g.user %}
-    <!-- Review form (for create or edit) -->
-    <div class="card mb-4">
-      <div class="card-body">
-        <h5 class="card-title">{{ "Edit Review" if editing else "New Review" }}</h5>
-        <form method="POST">
-          {{ form.hidden_tag() }}
+    <div class="review-form-card">
+      <h5>{{ "Edit Review" if editing else "New Review" }}</h5>
+      <form method="POST">
+        {{ form.hidden_tag() }}
 
-          <div class="mb-3">
-            {{ form.content.label(class="form-label") }}
-            {{ form.content(class="form-control") }}
-          </div>
+        <div>
+          {{ form.content.label(class="form-label") }}
+          {{ form.content(class="form-control") }}
+        </div>
 
-          <div class="mb-3">
-            {{ form.rating.label(class="form-label") }}
-            {{ form.rating(class="form-control") }}
-          </div>
+        <div>
+          {{ form.rating.label(class="form-label") }}
+          {{ form.rating(class="form-control") }}
+        </div>
 
-          <div class="mb-3">
-            {{ form.ride_id.label(class="form-label") }}
-            {{ form.ride_id(class="form-select") }}
-          </div>
+        <div>
+          {{ form.ride_id.label(class="form-label") }}
+          {{ form.ride_id(class="form-select") }}
+        </div>
 
-          <div class="mb-3">
-            {{ form.park_id.label(class="form-label") }}
-            {{ form.park_id(class="form-select") }}
-          </div>
+        <div>
+          {{ form.park_id.label(class="form-label") }}
+          {{ form.park_id(class="form-select") }}
+        </div>
 
-          <button type="submit" class="btn btn-primary">
-            {{ "Update Review" if editing else "Submit Review" }}
-          </button>
-
-          {% if editing %}
-            <a href="{{ url_for('review_page') }}" class="btn btn-secondary">Cancel</a>
-          {% endif %}
-        </form>
-      </div>
+        <button type="submit" class="button">
+          {{ "Update Review" if editing else "Submit Review" }}
+        </button>
+        {% if editing %}
+          <a href="{{ url_for('review_page') }}" class="button" style="background: #eee;">Cancel</a>
+        {% endif %}
+      </form>
     </div>
   {% endif %}
 
-  <!-- Existing Reviews List -->
-  <h4>All Reviews</h4>
+  <h4 style="font-family:'Quintessential'; color:#0078d4;">All Reviews</h4>
   {% for review in reviews %}
-    <div class="card mb-3">
-      <div class="card-body">
-        <p class="card-text"><strong>Rating:</strong> {{ review.rating }}</p>
-        <p class="card-text">{{ review.content }}</p>
-        <p class="card-text text-muted">By {{ review.users.username }} on {{ review.timestamp.strftime('%Y-%m-%d') }}</p>
-        {% if review.ride %}<p><strong>Ride:</strong> {{ review.ride.name }}</p>{% endif %}
-        {% if review.park %}<p><strong>Park:</strong> {{ review.park.name }}</p>{% endif %}
-
-        {% if review.user_id == session.get('user_id') %}
-          <a href="{{ url_for('review_page', edit_id=review.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
-          <form action="{{ url_for('delete_review', review_id=review.id) }}" method="POST" class="d-inline">
-            {{ form.csrf_token }}
-            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-          </form>
-        {% endif %}
+    <div class="review-card">
+      <div class="review-rating">
+        {% for i in range(review.rating) %}★{% endfor %}
+        {% for i in range(5 - review.rating) %}<span style="color:#bbb;">★</span>{% endfor %}
+        <span style="font-size:.99em; color:#444;">({{ review.rating }})</span>
       </div>
+      <div class="card-text">{{ review.content }}</div>
+      <div class="review-meta">
+        By {{ review.users.username }} on {{ review.timestamp.strftime('%Y-%m-%d') }}
+        {% if review.ride %}| <strong>Ride:</strong> {{ review.ride.name }} {% endif %}
+        {% if review.park %}| <strong>Park:</strong> {{ review.park.name }} {% endif %}
+      </div>
+      {% if review.user_id == session.get('user_id') %}
+        <div style="margin-top:0.7em;">
+          <a href="{{ url_for('review_page', edit_id=review.id) }}" class="button btn-sm">Edit</a>
+          <form action="{{ url_for('delete_review', review_id=review.id) }}" method="POST" style="display:inline;">
+            {{ form.csrf_token }}
+            <button type="submit" class="button btn-sm" style="background:#ffeaea;color:#b23b3b;">Delete</button>
+          </form>
+        </div>
+      {% endif %}
     </div>
   {% else %}
-    <p>No reviews yet.</p>
+    <p style="font-family:'Iansui';">No reviews yet.</p>
   {% endfor %}
-
-
-  
 </div>
 {% endblock %}
