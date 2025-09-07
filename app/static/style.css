@@ -349,14 +349,14 @@ p:hover{
     bottom: 13px;
     transform: translateX(-50%);
     font-size: 2.1em;
-    color: #0078d4;
+    color: #2070be;         /* Keep your blue */
     font-family: 'Quintessential';
     font-weight: bold;
-    background: rgba(255,255,255,0.86);
-    border-radius: 7px;
-    padding: 0.10em 0.47em;
-    box-shadow: 0 1px 4px rgba(0,123,212,0.07);
-    border: 1px solid #c2e9fb;
+    /* Remove background, border, and box-shadow: */
+    background: none;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
     min-width: 44px;
     text-align: center;
     transition: color 0.2s, background 0.2s;
