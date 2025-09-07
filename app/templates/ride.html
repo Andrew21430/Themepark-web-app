@@ -2,16 +2,18 @@
 {% block content %}
 
 
-<div style="display: flex; flex-direction: row;">
-    <!-- Height scale -->
+<div class="height-scale-outer">
     <div class="height-scale-container">
-        <div class="height-scale-bg">
-            <span class="height-scale-label">HEIGHT</span>
-            <span id="height-scale-value" class="height-scale-value">--</span>
+        <span class="height-scale-label">HEIGHT</span>
+        <span id="height-scale-value" class="height-scale-value">--</span>
+        <span class="height-scale-unit">m</span>
+        <div id="height-scale-indicator" class="height-scale-indicator">
+            <div class="height-scale-dot" id="height-scale-dot">&#8594;</div>
         </div>
-        <span style="font-size:.98em;color:#377ab7;letter-spacing:1px;margin-top:0.1em;opacity:0.76;font-family:'Quintessential'">m</span>
     </div>
+</div>
 
+<div class="with-bar-offset">
     <div style="flex:1">
         <form method="POST">
             {{ form.hidden_tag() }}
