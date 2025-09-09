@@ -530,3 +530,90 @@ p:hover{
       padding: 0.3em 1em;
     }
   }
+
+
+
+/* --- Search Box Styling --- */
+.search-form-themepark {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    background: linear-gradient(to right, #e3f5ff 60%, #b9eafe 100%);
+    border-radius: 1.5em;
+    box-shadow: 0 2px 16px 0 rgba(50,120,210,0.08);
+    padding: 0.7em 1.4em;
+    margin: 2em 0 2.5em 0;
+    width: 100%;
+    max-width: 520px;
+}
+
+.search-form-themepark label {
+    font-family: 'Quintessential', serif;
+    font-size: 1.25em;
+    color: #2982c0;
+    margin-right: 0.5em;
+    font-weight: 600;
+}
+
+.search-form-themepark input[type="text"],
+.search-form-themepark input[type="search"] {
+    font-family: 'Iansui', serif;
+    font-size: 1.18em;
+    background: #fff;
+    border: 2px solid #b9eafe;
+    border-radius: 1em;
+    padding: 0.45em 1.1em;
+    outline: none;
+    transition: border 0.2s;
+    min-width: 180px;
+}
+
+.search-form-themepark input[type="text"]:focus,
+.search-form-themepark input[type="search"]:focus {
+    border: 2px solid #2982c0;
+    background: #f5fcff;
+}
+
+.search-form-themepark button,
+.search-form-themepark input[type="submit"] {
+    background-image: linear-gradient(to bottom, #fff, #f8eedb);
+    border: none;
+    border-radius: 1em;
+    font-family: 'Quintessential', serif;
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #2070be;
+    padding: 0.45em 1.4em;
+    margin-left: 0.8em;
+    box-shadow: 0 2px 8px rgba(32,112,190,0.08);
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+}
+
+.search-form-themepark button:hover,
+.search-form-themepark input[type="submit"]:hover {
+    background: #e3f5ff;
+    color: #1566a0;
+}
+
+@media (max-width: 600px) {
+  .search-form-themepark {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5em;
+    padding: 0.7em 0.7em;
+    max-width: 100%;
+  }
+  .search-form-themepark input,
+  .search-form-themepark button,
+  .search-form-themepark input[type="submit"] {
+    font-size: 1em;
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+
