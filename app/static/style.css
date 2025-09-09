@@ -417,78 +417,116 @@ p:hover{
     .with-bar-offset { margin-left: 110px; }
 }
 
-/* Reviews page styling */
-
-.review-header {
-    font-family: 'Quintessential';
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    color: #0078d4;
-    letter-spacing: 1px;
-}
-.review-form-card {
-    background: linear-gradient(to bottom, #e3f5ff 80%, #caf0ff 100%);
-    border-radius: 16px;
-    box-shadow: 0 6px 24px rgba(0,0,0,0.09);
-    margin-bottom: 2rem;
-    padding: 2rem 1.5rem 1rem 1.5rem;
-    border-left: 8px solid #0078d4;
-}
-.review-form-card h5 {
-    font-family: 'Quintessential';
-    font-size: 1.5rem;
-}
-.review-form-card label {
-    font-family: 'Iansui';
-    font-size: 1.2rem;
-}
-.review-form-card .form-control, 
-.review-form-card .form-select {
-    font-size: 1.1rem;
-    border-radius: 7px;
-    padding: 0.5em;
-    margin-bottom: 0.7em;
-}
-.review-form-card .btn {
-    margin-right: 0.5em;
-}
-.review-card {
-    background: #fff;
-    border-radius: 15px;
-    box-shadow: 0 2px 10px rgba(0,123,212,0.10);
-    padding: 1.5rem 1.5rem 1rem 1.5rem;
-    margin-bottom: 1.5rem;
-    border-left: 8px solid #4FC3F7;
-    transition: box-shadow 0.2s;
-}
-.review-card .card-title {
-    font-family: 'Quintessential';
-    font-size: 1.3rem;
-    margin-bottom: 0.6em;
-}
-.review-card .card-text {
-    font-size: 1.15rem;
-    margin-bottom: .2em;
-}
-.review-card .review-rating {
-    font-size: 1.2rem;
+/* --- 2024 Reviews Card & Button Styling --- */
+.review-card-2024 {
+    background: linear-gradient(to bottom, #fff 80%, #f9f3e4 100%);
+    border-radius: 14px;
+    box-shadow: 0 4px 14px 0 rgba(120,90,30,0.11);
+    margin: 2.5em 0 2.5em 0;
+    padding: 2.2em 2.2em 1.1em 2.2em;
+  }
+  
+  .review-main {
+    margin-bottom: 1.7em;
+  }
+  
+  .review-rating-row {
+    font-size: 1.55em;
+    margin-bottom: 0.45em;
     color: #ffb300;
-    font-family: 'Quintessential';
-    margin-right: 0.5em;
-}
-.review-meta {
-    font-size: 0.95rem;
-    color: #555;
-    margin-top: 0.6em;
-}
-.review-card .btn, .review-card button[type="submit"] {
-    margin-top: 0.4em;
-    font-size: 1rem;
-}
-@media (max-width: 600px) {
-    .review-form-card, .review-card {
-        padding: 1em 0.5em;
+    font-family: 'Quintessential', serif;
+    display: flex;
+    align-items: center;
+  }
+  .star {
+    color: #ffb300;
+    font-size: 1.15em;
+  }
+  .star-empty {
+    color: #ddd;
+  }
+  
+  .review-content {
+    font-family: 'Iansui', serif;
+    font-size: 1.23em;
+    margin-bottom: 0.6em;
+  }
+  
+  .review-meta {
+    font-size: 1.09em;
+    color: #444;
+    font-family: 'Quintessential', serif;
+    margin-bottom: 0.4em;
+  }
+  
+  .review-actions-row {
+    display: flex;
+    gap: 1em;
+    margin-top: 0.5em;
+  }
+  
+  .review-action-btn-2024 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4em;
+    font-family: 'Quintessential', serif;
+    font-size: 1.5em;
+    font-weight: 600;
+    padding: 0.6em 2.2em;
+    border-radius: 16px;
+    border: 2.5px solid;
+    box-shadow: 0 2px 8px rgba(32,112,190,0.10);
+    cursor: pointer;
+    text-decoration: none;
+    min-width: 150px;
+    min-height: 60px;
+    text-align: center;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s, border 0.2s;
+    margin-right: 0;
+    margin-left: 0;
+  }
+  
+  .review-action-btn-2024 svg {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  
+  .review-action-btn-edit {
+    background: #f8fbff;
+    color: #2070be;
+    border-color: #2070be;
+  }
+  
+  .review-action-btn-edit:hover, .review-action-btn-edit:focus {
+    background: #e5f2fa;
+    color: #1257a1;
+    border-color: #1257a1;
+  }
+  
+  .review-action-btn-delete {
+    background: #ffeaea;
+    color: #d43d3d;
+    border-color: #d43d3d;
+  }
+  
+  .review-action-btn-delete:hover, .review-action-btn-delete:focus {
+    background: #fad7d7;
+    color: #a52626;
+    border-color: #a52626;
+  }
+  
+  @media (max-width: 700px) {
+    .review-card-2024 {
+      padding: 1em 0.5em;
     }
-    .review-header { font-size: 1.5rem; }
-}
-
+    .review-content, .review-meta, .review-rating-row {
+      font-size: 1.05em;
+    }
+    .review-action-btn-2024 {
+      font-size: 1em;
+      min-width: 100px;
+      min-height: 40px;
+      padding: 0.3em 1em;
+    }
+  }
