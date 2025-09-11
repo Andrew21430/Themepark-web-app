@@ -318,6 +318,26 @@ def add_park():
     return render_template("addpark.html", form=form)
 
 
+@app.route('/park/edit/<int:id>', methods=['GET', 'POST'])
+def edit_park(id):
+    park = models.Park.query.filter(models.Park.id == id).first_or_404()
+    form = ParkForm(obj=park)
+    if form.validate_on_submit():
+        form.populate_obj(park)
+        db.session.commit()
+        flash("Park updated!", "success")
+        return redirect(url_for('parkid', id=park.id))
+    return render_template('editpark.html', form=form, park=park)
+
+
+@app.route('/park/delete/<int:id>', methods=['POST'])
+def delete_park(id):
+    park = models.Park.query.filter(models.Park.id == id).first_or_404()
+    db.session.delete(park)
+    db.session.commit()
+    flash("Park deleted!", "success")
+    return redirect(url_for('park'))
+
 
 @app.route('/addride', methods=['GET', 'POST'])
 def add_ride():
@@ -357,6 +377,27 @@ def add_ride():
         return redirect(url_for('ride'))
 
     return render_template('addride.html', form=form)
+
+
+@app.route('/ride/edit/<int:id>', methods=['GET', 'POST'])
+def edit_ride(id):
+    ride = models.Ride.query.filter(models.Ride.id == id).first_or_404()
+    form = RideForm(obj=ride)
+    if form.validate_on_submit():
+        form.populate_obj(ride)
+        db.session.commit()
+        flash("Ride updated!", "success")
+        return redirect(url_for('rideid', id=ride.id))
+    return render_template('editride.html', form=form, ride=ride)
+
+
+@app.route('/ride/delete/<int:id>', methods=['POST'])
+def delete_ride(id):
+    ride = models.Ride.query.filter(models.Ride.id == id).first_or_404()
+    db.session.delete(ride)
+    db.session.commit()
+    flash("Ride deleted!", "success")
+    return redirect(url_for('ride'))
 
 
 # error 404 page

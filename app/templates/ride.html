@@ -29,6 +29,11 @@
                         <h1>{{ride.name}} {{ride.thrill_level}}</h1>
                         <p>{{ride.layout.description}}</p>
                         <a href="{{ url_for('review_page', ride_id=ride.id) }}" class="button">Review {{ ride.name }}</a>
+                        <a href="{{ url_for('edit_ride', id=ride.id) }}" class="button">Edit</a>
+                        <form action="{{ url_for('delete_ride', id=ride.id) }}" method="POST" style="display:inline;">
+                            {{ form.csrf_token }}
+                            <button type="submit" class="button button-danger">Delete</button>
+                        </form>
                     </article>
                     <article>
                         <img class="widthhalf" src="/static/Images/website/rides/{{ride.photo}}">
@@ -41,12 +46,19 @@
                         <h1>{{ride.name}} {{ride.thrill_level}}</h1>
                         <p>{{ride.layout.description}}</p>
                         <a href="{{ url_for('review_page', ride_id=ride.id) }}" class="button">Review {{ ride.name }}</a>
+                        <a href="{{ url_for('edit_ride', id=ride.id) }}" class="button">Edit</a>
+                        <form action="{{ url_for('delete_ride', id=ride.id) }}" method="POST" style="display:inline;">
+                            {{ form.csrf_token }}
+                            <button type="submit" class="button button-danger">Delete</button>
+                        </form>
                     </article>
                 {% endif %}
             {% endfor %}
         </main>
     </div>
 </div>
+
+
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
