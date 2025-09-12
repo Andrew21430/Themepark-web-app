@@ -1,90 +1,58 @@
 {% extends 'layout.html' %}
 {% block content %}
+<form method="POST" class="search-form-themepark">
+    {{ form.hidden_tag() }}
+    {{ form.search.label }} {{ form.search(size=32) }}
+    {{ form.submit() }}
+</form>
 
-
-<div class="height-scale-outer">
-    <div class="height-scale-container">
-        <span class="height-scale-label">HEIGHT</span>
-        <span id="height-scale-value" class="height-scale-value">--</span>
-        <span class="height-scale-unit">m</span>
-        <div id="height-scale-indicator" class="height-scale-indicator">
-            <div class="height-scale-dot" id="height-scale-dot">&#8594;</div>
-        </div>
-    </div>
-</div>
-
-<div class="with-bar-offset">
-    <div style="flex:1">
-        <form method="POST" class="search-form-themepark">
-            {{ form.hidden_tag() }}
-            {{ form.search.label }} {{ form.search(size=32) }}
-            {{ form.submit() }}
-        </form>
-
-        <main class="twocol-grid" id="rides-list">
-            {% for ride in rides %}
-                {% set flipped = loop.index0 is even %}
-                {% if flipped %}
-                    <article class="ride-article" data-ride-id="{{ride.id}}" data-ride-height="{{ride.Height or 0}}">
-                        <h1>{{ride.name}} {{ride.thrill_level}}</h1>
-                        <p>{{ride.layout.description}}</p>
-                        <a href="{{ url_for('review_page', ride_id=ride.id) }}" class="button">Review {{ ride.name }}</a>
-                        <a href="{{ url_for('edit_ride', id=ride.id) }}" class="button">Edit</a>
-                        <form action="{{ url_for('delete_ride', id=ride.id) }}" method="POST" style="display:inline;">
-                            {{ form.csrf_token }}
-                            <button type="submit" class="button button-danger">Delete</button>
-                        </form>
-                    </article>
-                    <article>
-                        <img class="widthhalf" src="/static/Images/website/rides/{{ride.photo}}">
-                    </article>
-                {% else %}
-                    <article>
-                        <img class="widthhalf" src="/static/Images/website/rides/{{ride.photo}}">
-                    </article>
-                    <article class="ride-article" data-ride-id="{{ride.id}}" data-ride-height="{{ride.Height or 0}}">
-                        <h1>{{ride.name}} {{ride.thrill_level}}</h1>
-                        <p>{{ride.layout.description}}</p>
-                        <a href="{{ url_for('review_page', ride_id=ride.id) }}" class="button">Review {{ ride.name }}</a>
-                        <a href="{{ url_for('edit_ride', id=ride.id) }}" class="button">Edit</a>
-                        <form action="{{ url_for('delete_ride', id=ride.id) }}" method="POST" style="display:inline;">
-                            {{ form.csrf_token }}
-                            <button type="submit" class="button button-danger">Delete</button>
-                        </form>
-                    </article>
+<main class="twocol-grid">
+    {% for ride in rides %}
+        {% set flipped = loop.index0 is even %}
+        {% if flipped %}
+            <article>
+                <h1>{{ride.name}} {{ride.thrill_level}}</h1>
+                <p>{{ride.layout.description}}</p>
+                <a href="{{ url_for('review_page', ride_id=ride.id) }}" class="button">
+                    Review {{ ride.name }}
+                </a>
+                {% if g.user %}
+                    <a href="{{ url_for('edit_ride', id=ride.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                    <form action="{{ url_for('delete_ride', id=ride.id) }}" method="POST" class="d-inline" style="display:inline;">
+                        {{ form.csrf_token }}
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
                 {% endif %}
-            {% endfor %}
-        </main>
-    </div>
-</div>
-
-
+            </article>
+            <article>
+                <img class="widthhalf" src="/static/Images/website/rides/{{ride.photo}}">
+            </article>
+        {% else %}
+            <article>
+                <img class="widthhalf" src="/static/Images/website/rides/{{ride.photo}}">
+            </article>
+            <article>
+                <h1>{{ride.name}} {{ride.thrill_level}}</h1>
+                <p>{{ride.layout.description}}</p>
+                <a href="{{ url_for('review_page', ride_id=ride.id) }}" class="button">
+                    Review {{ ride.name }}
+                </a>
+                {% if g.user %}
+                    <a href="{{ url_for('edit_ride', id=ride.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                    <form action="{{ url_for('delete_ride', id=ride.id) }}" method="POST" class="d-inline" style="display:inline;">
+                        {{ form.csrf_token }}
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                {% endif %}
+            </article>
+        {% endif %}
+    {% endfor %}
+</main>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    function updateHeightScale() {
-        const articles = Array.from(document.querySelectorAll('.ride-article'));
-        if (!articles.length) return;
-        const viewportMid = window.innerHeight / 2;
-        let closest = null, minDist = Infinity;
-        articles.forEach(article => {
-            const rect = article.getBoundingClientRect();
-            const articleMid = rect.top + rect.height / 2;
-            const dist = Math.abs(articleMid - viewportMid);
-            if (dist < minDist) {
-                minDist = dist;
-                closest = article;
-            }
-        });
-        if (closest) {
-            document.getElementById('height-scale-value').textContent = closest.getAttribute('data-ride-height') || '--';
-        }
-    }
-    window.addEventListener('scroll', updateHeightScale);
-    window.addEventListener('resize', updateHeightScale);
-    updateHeightScale();
-});
+    window.onload = function() {
+      window.scrollTo(0, document.body.scrollHeight);
+    };
 </script>
-
 <div id="bottom-content"></div>
 {% endblock %}
