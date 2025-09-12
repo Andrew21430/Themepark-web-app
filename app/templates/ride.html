@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 {% block content %}
-<form method="POST" class="search-form-themepark">
+
+<form method="POST">
     {{ form.hidden_tag() }}
     {{ form.search.label }} {{ form.search(size=32) }}
     {{ form.submit() }}
@@ -13,15 +14,24 @@
             <article>
                 <h1>{{ride.name}} {{ride.thrill_level}}</h1>
                 <p>{{ride.layout.description}}</p>
-                <a href="{{ url_for('review_page', ride_id=ride.id) }}" class="button">
-                    Review {{ ride.name }}
-                </a>
+
                 {% if g.user %}
-                    <a href="{{ url_for('edit_ride', id=ride.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
-                    <form action="{{ url_for('delete_ride', id=ride.id) }}" method="POST" class="d-inline" style="display:inline;">
-                        {{ form.csrf_token }}
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
+                    <a href="{{ url_for('review_page', ride_id=ride.id) }}" class="button">
+                        Review {{ ride.name }}
+                    </a>
+                    <div style="margin-top:1em; display:flex; gap:1em;">
+                        <a href="{{ url_for('edit_ride', id=ride.id) }}" class="review-action-btn-2024 review-action-btn-edit">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="none" stroke="#2070be" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+                          Edit
+                        </a>
+                        <form action="{{ url_for('delete_ride', id=ride.id) }}" method="POST" class="d-inline" style="display:inline;">
+                          {{ form.csrf_token }}
+                          <button type="submit" class="review-action-btn-2024 review-action-btn-delete">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="none" stroke="#d43d3d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
+                            Delete
+                          </button>
+                        </form>
+                    </div>
                 {% endif %}
             </article>
             <article>
@@ -34,25 +44,57 @@
             <article>
                 <h1>{{ride.name}} {{ride.thrill_level}}</h1>
                 <p>{{ride.layout.description}}</p>
-                <a href="{{ url_for('review_page', ride_id=ride.id) }}" class="button">
-                    Review {{ ride.name }}
-                </a>
+
                 {% if g.user %}
-                    <a href="{{ url_for('edit_ride', id=ride.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
-                    <form action="{{ url_for('delete_ride', id=ride.id) }}" method="POST" class="d-inline" style="display:inline;">
-                        {{ form.csrf_token }}
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
+                    <a href="{{ url_for('review_page', ride_id=ride.id) }}" class="button">
+                        Review {{ ride.name }}
+                    </a>
+                    <div style="margin-top:1em; display:flex; gap:1em;">
+                        <a href="{{ url_for('edit_ride', id=ride.id) }}" class="review-action-btn-2024 review-action-btn-edit">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="none" stroke="#2070be" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+                          Edit
+                        </a>
+                        <form action="{{ url_for('delete_ride', id=ride.id) }}" method="POST" class="d-inline" style="display:inline;">
+                          {{ form.csrf_token }}
+                          <button type="submit" class="review-action-btn-2024 review-action-btn-delete">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="none" stroke="#d43d3d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
+                            Delete
+                          </button>
+                        </form>
+                    </div>
                 {% endif %}
             </article>
         {% endif %}
     {% endfor %}
 </main>
 
+
+
 <script>
-    window.onload = function() {
-      window.scrollTo(0, document.body.scrollHeight);
-    };
+document.addEventListener("DOMContentLoaded", function() {
+    function updateHeightScale() {
+        const articles = Array.from(document.querySelectorAll('.ride-article'));
+        if (!articles.length) return;
+        const viewportMid = window.innerHeight / 2;
+        let closest = null, minDist = Infinity;
+        articles.forEach(article => {
+            const rect = article.getBoundingClientRect();
+            const articleMid = rect.top + rect.height / 2;
+            const dist = Math.abs(articleMid - viewportMid);
+            if (dist < minDist) {
+                minDist = dist;
+                closest = article;
+            }
+        });
+        if (closest) {
+            document.getElementById('height-scale-value').textContent = closest.getAttribute('data-ride-height') || '--';
+        }
+    }
+    window.addEventListener('scroll', updateHeightScale);
+    window.addEventListener('resize', updateHeightScale);
+    updateHeightScale();
+});
 </script>
+
 <div id="bottom-content"></div>
 {% endblock %}
