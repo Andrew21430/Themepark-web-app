@@ -1,10 +1,49 @@
 {% extends 'layout.html' %}
 {% block content %}
-<h2>Edit Ride</h2>
-<form method="POST">
-    {{ form.hidden_tag() }}
-    {{ form.name.label }} {{ form.name() }}<br>
-    <!-- Add all ride fields as needed -->
-    <button type="submit" class="button">Save Changes</button>
-</form>
+<div class="review-card-2024">
+  <h2>Edit Ride</h2>
+  <form method="POST" enctype="multipart/form-data">
+      {{ form.hidden_tag() }}
+      <div class="mb-3">
+        {{ form.name.label }} {{ form.name(class="form-control") }}
+      </div>
+      <div class="mb-3">
+        {{ form.ride_type_id.label }} {{ form.ride_type_id(class="form-select") }}
+      </div>
+      <div class="mb-3">
+        {{ form.layout_id.label }} {{ form.layout_id(class="form-select") }}
+      </div>
+      <div class="mb-3">
+        {{ form.theme_id.label }} {{ form.theme_id(class="form-select") }}
+      </div>
+      <div class="mb-3">
+        {{ form.launch_type_id.label }} {{ form.launch_type_id(class="form-select") }}
+      </div>
+      <div class="mb-3">
+        {{ form.park_id.label }} {{ form.park_id(class="form-select") }}
+      </div>
+      <div class="mb-3">
+        {{ form.restriction_id.label }} {{ form.restriction_id(class="form-select") }}
+      </div>
+      <div class="mb-3">
+        {{ form.constructor_id.label }} {{ form.constructor_id(class="form-select") }}
+      </div>
+      <div class="mb-3">
+        {{ form.thrill_level.label }} {{ form.thrill_level(class="form-control") }}
+      </div>
+      <div class="mb-3">
+        {{ form.Height.label }} {{ form.Height(class="form-control") }}
+      </div>
+      <div class="mb-3">
+        {{ form.photo.label }} {{ form.photo(class="form-control") }}
+      </div>
+      <button type="submit" class="review-action-btn-2024 review-action-btn-edit">
+        <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="none" stroke="#2070be" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+        Save Changes
+      </button>
+      <a href="{{ url_for('rideid', id=ride.id) }}" class="review-action-btn-2024 review-action-btn-delete" style="margin-left:1em;">
+        Cancel
+      </a>
+  </form>
+</div>
 {% endblock %}
