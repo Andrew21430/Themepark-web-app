@@ -56,6 +56,7 @@ class ReviewForm(FlaskForm):
 class ParkForm(FlaskForm):
     name = StringField("Park Name", validators=[DataRequired()])
     location = StringField("Location", validators=[DataRequired()])
+    photo = FileField('Photo', validators=[Optional(), FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')])
     submit = SubmitField("Add Park")
 
 

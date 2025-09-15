@@ -305,12 +305,19 @@ def delete_review(review_id):
 
 @app.route("/addpark", methods=["GET", "POST"])
 def add_park():
-    # This route handles adding a new park
     form = ParkForm()
-    # Check if the form is submitted and valid
     if form.validate_on_submit():
-        # Create new Park instance
-        new_park = Park(name=form.name.data, location=form.location.data)
+        filename = None
+        if form.photo.data:
+            filename = secure_filename(form.photo.data.filename)
+            park_folder = os.path.join(os.path.dirname(__file__), 'static', 'Images', 'website')
+            os.makedirs(park_folder, exist_ok=True)
+            form.photo.data.save(os.path.join(park_folder, filename))
+        new_park = Park(
+            name=form.name.data,
+            location=form.location.data,
+            photo=filename  # store just the filename!
+        )
         db.session.add(new_park)
         db.session.commit()
         flash("Park added!", "success")

@@ -1,10 +1,17 @@
 {% extends 'layout.html' %}
 {% block content %}
   <h2>Add a New Park</h2>
-  <form method="POST">
+<form method="POST" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
-    {{ form.name.label }} {{ form.name() }}<br>
-    {{ form.location.label }} {{ form.location() }}<br>
-    {{ form.submit() }}
-  </form>
+    <div>
+      {{ form.name.label }} {{ form.name() }}
+    </div>
+    <div>
+      {{ form.location.label }} {{ form.location() }}
+    </div>
+    <div>
+      {{ form.photo.label }} {{ form.photo() }}
+    </div>
+    <button type="submit" class="button">Add Park</button>
+</form>
 {% endblock %}
