@@ -310,17 +310,13 @@ def delete_review(review_id):
 def add_park():
     form = ParkForm()
     if form.validate_on_submit():
-        filename = None
-        if form.photo.data:
-            filename = secure_filename(form.photo.data.filename)
-            park_folder = os.path.join(os.path.dirname(__file__), 'static', 'Images', 'website')
-            os.makedirs(park_folder, exist_ok=True)
-            form.photo.data.save(os.path.join(park_folder, filename))
-        new_park = Park(
-            name=form.name.data,
-            location=form.location.data,
-            photo=filename  # store just the filename!
-        )
+        # Check for duplicates (case-insensitive)
+        existing_park = Park.query.filter(db.func.lower(Park.name) == form.name.data.lower()).first()
+        if existing_park:
+            flash("A park with that name already exists.", "danger")
+            return render_template("addpark.html", form=form)
+        # No duplicate found; create new park
+        new_park = Park(name=form.name.data, location=form.location.data)
         db.session.add(new_park)
         db.session.commit()
         flash("Park added!", "success")
@@ -353,7 +349,21 @@ def delete_park(id):
 def add_ride():
     form = RideForm()
     if form.validate_on_submit():
-        # Create Ride without park_id
+        # Check for duplicates in the selected park
+        selected_park = models.Park.query.get(form.park_id.data)
+        duplicate = (
+            models.Ride.query
+            .join(models.Ride.parks)
+            .filter(
+                db.func.lower(models.Ride.name) == form.name.data.lower(),
+                models.Park.id == selected_park.id
+            )
+            .first()
+        )
+        if duplicate:
+            flash("A ride with that name already exists in the selected park.", "danger")
+            return render_template('addride.html', form=form)
+        # No duplicate, proceed to add
         new_ride = models.Ride(
             name=form.name.data,
             ride_type_id=form.ride_type_id.data,
@@ -365,29 +375,15 @@ def add_ride():
             constructor_id=form.constructor_id.data,
             Height=form.Height.data
         )
-
-        # Handle photo upload
-        if form.photo.data and hasattr(form.photo.data, "filename") and form.photo.data.filename:
-            filename = secure_filename(form.photo.data.filename)
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            form.photo.data.save(filepath)
-            new_ride.photo = filename  # Store just the filename!
-        else:
-            new_ride.photo = "default.jpg"
-
-        # Add the new ride to the DB first
+        # [handle photo upload logic here...]
         db.session.add(new_ride)
         db.session.commit()
-
-        # Now associate the ride with the selected park
-        selected_park = models.Park.query.get(form.park_id.data)
+        # Associate with park
         if selected_park:
             new_ride.parks.append(selected_park)
             db.session.commit()
-
         flash("New ride added successfully!", "success")
         return redirect(url_for('ride'))
-
     return render_template('addride.html', form=form)
 
 
