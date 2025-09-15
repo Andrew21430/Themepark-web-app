@@ -2,7 +2,7 @@ from app import app
 from flask import render_template, abort, request, redirect, url_for, flash, session, g, Flask
 # from flask_sqlalchemy import SQLAlchemy  # no more boring old SQL for us!
 # from collections import defaultdict
-from app.forms import RideSearchForm, ParkSearchForm, RegisterForm, LoginForm, ReviewForm, ParkForm, RideForm
+from app.forms import RideSearchForm, ParkSearchForm, RegisterForm, LoginForm, ReviewForm, ParkForm, RideForm, DummyForm
 from functools import wraps
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash
@@ -57,6 +57,7 @@ def root():
 def park():
     # Initialize the search form
     form = ParkSearchForm()
+    delete_form = DummyForm()
     parks = []
     # Check if the form is submitted and valid
     if form.validate_on_submit():
@@ -65,7 +66,7 @@ def park():
         parks = models.Park.query.filter(models.Park.name.ilike(f"%{search_term}%")).all()
     else:
         parks = models.Park.query.all()
-    return render_template('park.html', page_title='PARKS', parks=parks, form=form)
+    return render_template('park.html', page_title='PARKS', parks=parks, form=form, delete_form=delete_form)
 
 
 @app.route('/park/<int:id>', methods=['GET', 'POST'])
@@ -83,13 +84,14 @@ def parkid(id):
 @app.route('/ride', methods=['GET', 'POST'])
 def ride():
     form = RideSearchForm()
+    delete_form = DummyForm()
     rides = []
     if form.validate_on_submit():
         search_term = form.search.data
         rides = models.Ride.query.filter(models.Ride.name.ilike(f"%{search_term}%")).all()
     else:
         rides = models.Ride.query.join(models.Layout).order_by(models.Ride.Height.desc()).all()
-    return render_template('ride.html', page_title='RIDES', rides=rides, form=form)
+    return render_template('ride.html', page_title='RIDES', rides=rides, form=form, delete_form=delete_form)
 
 
 @app.route('/ride/<int:id>')

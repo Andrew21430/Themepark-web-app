@@ -85,3 +85,6 @@ class RideForm(FlaskForm):
         self.park_id.choices = [(p.id, p.name) for p in Park.query.all()]
         self.restriction_id.choices = [(res.id, res.reason) for res in Restriction.query.all()]
         self.constructor_id.choices = [(c.id, c.name) for c in Constructor.query.all()]
+
+class DummyForm(FlaskForm):
+    pass
