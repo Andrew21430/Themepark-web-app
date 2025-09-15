@@ -742,3 +742,250 @@ textarea.form-control:focus, textarea:focus {
   box-shadow: 0 0 0 3px #f4f1bb, -2px 2px 10px rgba(81,41,10,0.11);
 }
 
+
+
+
+/* --- HEIGHT SCALE BAR --- */
+.height-scale-outer {
+    position: fixed;
+    top: 50%;
+    left: 0;
+    z-index: 30;
+    height: 340px;
+    width: 95px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+}
+
+/* This pushes your main content to the right so it's not hidden behind the bar */
+.with-bar-offset {
+    margin-left: 110px;
+}
+
+@media (max-width: 700px) {
+    .height-scale-outer { display: none; }
+    .with-bar-offset { margin-left: 0; }
+}
+
+/* --- HEIGHT SCALE BAR ENHANCED --- */
+.height-scale-outer {
+    position: fixed;
+    top: 50%;
+    left: 0;
+    z-index: 30;
+    height: 340px;
+    width: 95px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+}
+
+.height-scale-container {
+    width: 55px;
+    height: 320px;
+    border-radius: 26px;
+    background: linear-gradient(to top, #a1c4fd 0%, #c2e9fb 100%);
+    border: 2.5px solid #0078d4;
+    box-shadow: 0 8px 18px rgba(0,123,212,0.15);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    padding: 0 0.2em;
+    overflow: hidden;
+}
+
+/* Center the text in the bar */
+.height-scale-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 auto;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 2.6em; /* space for dot at bottom */
+}
+
+.height-scale-label {
+    font-family: 'Quintessential', 'Segoe UI', Arial, sans-serif;
+    font-size: 1.3em;
+    font-weight: 600;
+    color: #2671b8;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.2em;
+    margin-top: 0.4em;
+    opacity: 0.92;
+    text-shadow: 0 2px 8px #fff9;
+    position: static;
+    transform: none;
+    left: unset; top: unset;
+}
+
+.height-scale-value {
+    font-family: 'Quintessential', 'Segoe UI', Arial, sans-serif;
+    font-size: 2.3em;
+    font-weight: bold;
+    color: #1566a0;
+    background: none;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    line-height: 1.05em;
+    text-align: center;
+    margin: 0.1em 0 0.1em 0;
+    min-width: 44px;
+    letter-spacing: 0.5px;
+    position: static;
+    transform: none;
+    left: unset; bottom: unset;
+}
+
+.height-scale-unit {
+    font-family: 'Quintessential', 'Segoe UI', Arial, sans-serif;
+    font-size: 1.15em;
+    color: #2f7ac8;
+    font-weight: 500;
+    opacity: 0.78;
+    margin-bottom: 0.6em;
+    margin-top: 0;
+    text-align: center;
+    letter-spacing: 1px;
+    position: static;
+    left: unset; bottom: unset; transform: none;
+}
+
+.height-scale-indicator {
+    width: 100%;
+    height: 0;
+    pointer-events: none;
+    position: absolute;
+    left: 0;
+    bottom: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3;
+}
+
+/* Blue dot with arrow */
+.height-scale-dot {
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(145deg, #51adf6 60%, #e3f5ff 120%);
+    border-radius: 50%;
+    border: 2.5px solid #0078d4;
+    box-shadow: 0 2px 8px rgba(0,123,212,0.13);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Quintessential';
+    font-size: 1.2em;
+    color: #fff;
+    font-weight: bold;
+    position: relative;
+    pointer-events: none;
+}
+
+.height-scale-dot-arrow {
+    width: 15px;
+    height: 15px;
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-45%, -55%);
+}
+
+.height-scale-dot-arrow svg {
+    width: 15px;
+    height: 15px;
+    display: block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 700px) {
+    .height-scale-outer { display: none; }
+    .with-bar-offset { margin-left: 0; }
+}
+@media (min-width: 701px) {
+    .with-bar-offset { margin-left: 110px; }
+}
+
+
+
+.height-scale-label {
+    position: absolute;
+    top: 25px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: #2070be;
+    font-size: 2em;
+    font-family: 'Quintessential', Arial, sans-serif;
+    font-weight: bold;
+    opacity: 0.7;
+    pointer-events: none;
+    white-space: nowrap;
+    text-shadow: none;
+    z-index: 2;
+}
+
+.height-scale-value {
+    position: absolute;
+    top: 95px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 5em;
+    color: #2070be;
+    font-family: 'Quintessential', Arial, sans-serif;
+    font-weight: bold;
+    background: none;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    min-width: 44px;
+    opacity: 0.8;
+    z-index: 2;
+    line-height: 1.1;
+}
+
+.height-scale-unit {
+    position: absolute;
+    top: 220px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 2em;
+    color: #377ab7;
+    font-family: 'Quintessential', Arial, sans-serif;
+    opacity: 0.7;
+    z-index: 2;
+    pointer-events: none;
+}
+
+
+.height-scale-dot {
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    transform: translateX(-50%);
+    width: 34px;
+    height: 34px;
+    background: linear-gradient(145deg, #51adf6 60%, #e3f5ff 120%);
+    border-radius: 50%;
+    border: 2.5px solid #0078d4;
+    box-shadow: 0 2px 8px rgba(0,123,212,0.13);
+    z-index: 3;
+    pointer-events: none;
+}
