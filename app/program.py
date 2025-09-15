@@ -72,13 +72,14 @@ def park():
 @app.route('/park/<int:id>', methods=['GET', 'POST'])
 def parkid(id):
     form = ParkSearchForm()
+    delete_form = DummyForm()
     parks = []
     if form.validate_on_submit():
         search_term = form.search.data
         parks = models.Park.query.filter(models.Park.name.ilike(f"%{search_term}%")).all()
     else:
         parks = models.Park.query.filter(models.Park.id == id).first_or_404()
-    return render_template('park.html', page_title='PARKS', parks=[parks], form=form)
+    return render_template('park.html', page_title='PARKS', parks=[parks], form=form, delete_form=delete_form)
 
 
 @app.route('/ride', methods=['GET', 'POST'])
@@ -97,9 +98,9 @@ def ride():
 @app.route('/ride/<int:id>')
 def rideid(id):
     form = RideSearchForm()
-    rides = []
     rides = models.Ride.query.join(models.Layout).order_by(models.Ride.Height.desc()).filter(models.Ride.id == id).first_or_404()
-    return render_template('ride.html', page_title='RIDES', rides=[rides], form=form)
+    delete_form = DummyForm()   # <-- Add this line
+    return render_template('ride.html', page_title='RIDES', rides=[rides], form=form, delete_form=delete_form)
 
 
 @app.route('/manufactuer')
@@ -366,11 +367,13 @@ def add_ride():
         )
 
         # Handle photo upload
-        if form.photo.data:
+        if form.photo.data and hasattr(form.photo.data, "filename") and form.photo.data.filename:
             filename = secure_filename(form.photo.data.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             form.photo.data.save(filepath)
-            new_ride.photo = f'Images/website/rides/{filename}'
+            new_ride.photo = filename  # Store just the filename!
+        else:
+            new_ride.photo = "default.jpg"
 
         # Add the new ride to the DB first
         db.session.add(new_ride)
@@ -393,7 +396,15 @@ def edit_ride(id):
     ride = models.Ride.query.filter(models.Ride.id == id).first_or_404()
     form = RideForm(obj=ride)
     if form.validate_on_submit():
+        # update regular fields
         form.populate_obj(ride)
+        # Handle photo upload (NEW LOGIC)
+        if form.photo.data and hasattr(form.photo.data, "filename") and form.photo.data.filename:
+            filename = secure_filename(form.photo.data.filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            form.photo.data.save(filepath)
+            ride.photo = filename  # Store just the filename!
+        # If no file uploaded, don't touch ride.photo (keeps old value)
         db.session.commit()
         flash("Ride updated!", "success")
         return redirect(url_for('rideid', id=ride.id))

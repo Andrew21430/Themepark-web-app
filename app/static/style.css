@@ -619,25 +619,70 @@ p:hover{
 
 
 
-/* Styled select (dropdown) */
-.form-select, select {
+.form-control, input[type="text"], input[type="password"], input[type="number"], textarea {
     background: linear-gradient(to bottom, #fff, #f4f1bb);
     color: #222823;
     border: 2px solid #929487;
     border-radius: 0.7em;
     font-family: 'Iansui', sans-serif;
-    font-size: 1.25em;
+    font-size: 1.2em;
     padding: 0.6em 1.2em;
     margin-bottom: 1em;
     box-shadow: 0 2px 8px rgba(146, 148, 135, 0.07);
-    appearance: none;
     outline: none;
     transition: border-color 0.2s;
 }
 
-.form-select:focus, select:focus {
-    border-color: #222823;
-    background: #fefae0;
+/* Fixes select backgrounds and guarantees a visible down arrow on all modern browsers */
+select.form-control,
+select {
+    background-color: #fffbe7 !important;
+    background-image:
+      url("data:image/svg+xml;utf8,<svg fill='none' stroke='%237f7f7f' stroke-width='2' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><polyline points='6 8 10 12 14 8'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 1.2em center;
+    background-size: 1.2em;
+    color: #222823;
+    border: 2px solid #929487;
+    border-radius: 0.7em;
+    font-family: 'Iansui', sans-serif;
+    font-size: 1.2em;
+    padding: 0.6em 2.5em 0.6em 1.2em;
+    margin-bottom: 1em;
+    box-shadow: 0 2px 8px rgba(146, 148, 135, 0.07);
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    transition: border-color 0.2s;
+    cursor: pointer;
+}
+
+select.form-control:focus,
+select:focus {
+    border-color: #2070be;
+    background-color: #fefae0 !important;
+}
+
+select.form-control:hover,
+select:hover {
+    border-color: #2982c0;
+}
+
+/* Only apply special background gradient to inputs (not selects!) */
+input.form-control,
+textarea.form-control {
+    background: linear-gradient(to bottom, #fff, #f4f1bb);
+    color: #222823;
+    border: 2px solid #929487;
+    border-radius: 0.7em;
+    font-family: 'Iansui', sans-serif;
+    font-size: 1.2em;
+    padding: 0.6em 1.2em;
+    margin-bottom: 1em;
+    box-shadow: 0 2px 8px rgba(146, 148, 135, 0.07);
+    outline: none;
+    transition: border-color 0.2s;
 }
 
 /* Styled text input */
