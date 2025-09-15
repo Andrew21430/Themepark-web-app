@@ -306,22 +306,37 @@ def delete_review(review_id):
     return redirect(url_for("review_page"))
 
 
-@app.route("/addpark", methods=["GET", "POST"])
+@app.route('/addpark', methods=['GET', 'POST'])
 def add_park():
     form = ParkForm()
     if form.validate_on_submit():
-        # Check for duplicates (case-insensitive)
+        # Check for duplicate park name (case-insensitive)
         existing_park = Park.query.filter(db.func.lower(Park.name) == form.name.data.lower()).first()
         if existing_park:
             flash("A park with that name already exists.", "danger")
-            return render_template("addpark.html", form=form)
-        # No duplicate found; create new park
-        new_park = Park(name=form.name.data, location=form.location.data)
+            return render_template('addpark.html', form=form)
+
+        # --- Handle photo upload (for parks) ---
+        if form.photo.data and hasattr(form.photo.data, "filename") and form.photo.data.filename:
+            filename = secure_filename(form.photo.data.filename)
+            upload_folder = os.path.join(app.root_path, "static", "Images", "website", "parks")
+            os.makedirs(upload_folder, exist_ok=True)
+            filepath = os.path.join(upload_folder, filename)
+            form.photo.data.save(filepath)
+            photo_filename = filename
+        else:
+            photo_filename = "default.jpg"  # Make sure you have a default image
+
+        new_park = Park(
+            name=form.name.data,
+            location=form.location.data,
+            photo=photo_filename
+        )
         db.session.add(new_park)
         db.session.commit()
         flash("Park added!", "success")
         return redirect(url_for("root"))
-    return render_template("addpark.html", form=form)
+    return render_template('addpark.html', form=form)
 
 
 @app.route('/park/edit/<int:id>', methods=['GET', 'POST'])
@@ -375,7 +390,16 @@ def add_ride():
             constructor_id=form.constructor_id.data,
             Height=form.Height.data
         )
-        # [handle photo upload logic here...]
+        # --- FILE UPLOAD FIX ---
+        if form.photo.data and hasattr(form.photo.data, "filename") and form.photo.data.filename:
+            filename = secure_filename(form.photo.data.filename)
+            upload_folder = os.path.join(app.root_path, "static", "Images", "website", "rides")
+            os.makedirs(upload_folder, exist_ok=True)
+            filepath = os.path.join(upload_folder, filename)
+            form.photo.data.save(filepath)
+            new_ride.photo = filename
+        else:
+            new_ride.photo = "default.jpg"  # Make sure you have this default image
         db.session.add(new_ride)
         db.session.commit()
         # Associate with park
