@@ -99,7 +99,7 @@ def ride():
 def rideid(id):
     form = RideSearchForm()
     rides = models.Ride.query.join(models.Layout).order_by(models.Ride.Height.desc()).filter(models.Ride.id == id).first_or_404()
-    delete_form = DummyForm()   # <-- Add this line
+    delete_form = DummyForm()   
     return render_template('ride.html', page_title='RIDES', rides=[rides], form=form, delete_form=delete_form)
 
 
@@ -427,7 +427,7 @@ def edit_ride(id):
         # If no file uploaded, don't touch ride.photo (keeps old value)
         db.session.commit()
         flash("Ride updated!", "success")
-        return redirect(url_for('rideid', id=ride.id))
+        return redirect(url_for('ride', id=ride.id))
     return render_template('editride.html', form=form, ride=ride)
 
 
