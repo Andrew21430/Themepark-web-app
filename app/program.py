@@ -353,6 +353,7 @@ def add_park():
         new_park = Park(
             name=form.name.data,
             location=form.location.data,
+            description=form.description.data,
             photo=photo_filename
         )
         db.session.add(new_park)
