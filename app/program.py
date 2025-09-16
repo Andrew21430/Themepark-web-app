@@ -339,7 +339,7 @@ def add_park():
             flash("A park with that name already exists.", "danger")
             return render_template('addpark.html', form=form)
 
-        # --- Handle photo upload (for parks) ---
+        # Handle photo upload (for parks)
         if form.photo.data and hasattr(form.photo.data, "filename") and form.photo.data.filename:
             filename = secure_filename(form.photo.data.filename)
             upload_folder = os.path.join(app.root_path, "static", "Images", "website", "parks")
@@ -359,6 +359,11 @@ def add_park():
         db.session.commit()
         flash("Park added!", "success")
         return redirect(url_for("root"))
+    elif form.is_submitted():
+        # Show file type errors as flash messages (for photo field)
+        if form.photo.errors:
+            for error in form.photo.errors:
+                flash(f"Photo upload error: {error}", "warning")
     return render_template('addpark.html', form=form)
 
 
@@ -431,6 +436,11 @@ def add_ride():
             db.session.commit()
         flash("New ride added successfully!", "success")
         return redirect(url_for('ride'))
+    elif form.is_submitted():
+        # Show file type errors as flash messages (for photo field)
+        if form.photo.errors:
+            for error in form.photo.errors:
+                flash(f"Photo upload error: {error}", "warning")
     return render_template('addride.html', form=form)
 
 

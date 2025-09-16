@@ -3,14 +3,20 @@
 
 <h2>Add New Ride</h2>
 
-<form method="POST" enctype="multipart/form-data">
+<form method="POST" enctype="multipart/form-data" class="themed-form">
     {{ form.hidden_tag() }}
 
     {% for field in form %}
         {% if field.type != 'CSRFTokenField' and field.name != 'submit' %}
             <div class="form-group">
-                {{ field.label }}<br>
-                {{ field(class="form-control") }}
+                {{ field.label }}
+                {% if field.type == 'FileField' %}
+                    {{ field(class="file-upload-themepark") }}
+                {% elif field.type == 'SubmitField' %}
+                    {# skip, handled below #}
+                {% else %}
+                    {{ field(class="form-control") }}
+                {% endif %}
                 {% if field.errors %}
                     <ul class="error-list">
                         {% for error in field.errors %}
@@ -22,8 +28,7 @@
         {% endif %}
     {% endfor %}
 
-    <p>{{ form.submit(class="btn btn-primary") }}</p>
+    {{ form.submit(class="search-btn-themepark") }}
 </form>
 
 {% endblock %}
-
