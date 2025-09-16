@@ -54,19 +54,27 @@
     </div>
   {% endif %}
 
-  <form method="get" class="search-form-themepark" style="margin-bottom:2em;">
-  {{ search_form.hidden_tag() }}
-
-  {{ search_form.search.label }} {{ search_form.search(size=18) }}
-
-  {{ search_form.ride_id.label }} {{ search_form.ride_id() }}
-
-  {{ search_form.park_id.label }} {{ search_form.park_id() }}
-
-  {{ search_form.username.label }} {{ search_form.username(size=12) }}
-
-  {{ search_form.submit(class="search-btn-themepark") }}
-</form>
+  <form method="get" class="search-form-themepark search-form-horizontal" style="margin-bottom:2em; flex-wrap: wrap;">
+  <div class="search-field">
+    {{ search_form.search.label }}<br>
+    {{ search_form.search(size=15) }}
+  </div>
+  <div class="search-field">
+    {{ search_form.ride_id.label }}<br>
+    {{ search_form.ride_id() }}
+  </div>
+  <div class="search-field">
+    {{ search_form.park_id.label }}<br>
+    {{ search_form.park_id() }}
+  </div>
+  <div class="search-field">
+    {{ search_form.username.label }}<br>
+    {{ search_form.username(size=10) }}
+  </div>
+  <div class="search-field" style="align-self: flex-end;">
+    {{ search_form.submit(class="search-btn-themepark") }}
+  </div>
+  </form>
   <h2>All Reviews</h2>
 
   {% for review in reviews %}
