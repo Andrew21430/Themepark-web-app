@@ -2,7 +2,13 @@
 {% block content %}
 <div class="container mt-4">
 
-  <h2>Write a review</h2>
+    <h2>Write a review</h2>
+  
+  {% if not g.user %}
+    <div style="background: #ffeaea; color: #b30000; padding: 1em; border-radius: 8px; font-size: 1.2em; margin-bottom: 2em;">
+      You must <a href="{{ url_for('login') }}">log in</a> to write a review.
+    </div>
+  {% endif %}
   
   {# Review Form: Only show if logged in #}
   {% if g.user %}
@@ -48,6 +54,19 @@
     </div>
   {% endif %}
 
+  <form method="get" class="search-form-themepark" style="margin-bottom:2em;">
+  {{ search_form.hidden_tag() }}
+
+  {{ search_form.search.label }} {{ search_form.search(size=18) }}
+
+  {{ search_form.ride_id.label }} {{ search_form.ride_id() }}
+
+  {{ search_form.park_id.label }} {{ search_form.park_id() }}
+
+  {{ search_form.username.label }} {{ search_form.username(size=12) }}
+
+  {{ search_form.submit(class="search-btn-themepark") }}
+</form>
   <h2>All Reviews</h2>
 
   {% for review in reviews %}

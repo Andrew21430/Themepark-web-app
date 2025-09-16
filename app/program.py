@@ -2,7 +2,7 @@ from app import app
 from flask import render_template, abort, request, redirect, url_for, flash, session, g, Flask
 # from flask_sqlalchemy import SQLAlchemy  # no more boring old SQL for us!
 # from collections import defaultdict
-from app.forms import RideSearchForm, ParkSearchForm, RegisterForm, LoginForm, ReviewForm, ParkForm, RideForm, DummyForm
+from app.forms import RideSearchForm, ParkSearchForm, RegisterForm, LoginForm, ReviewForm, ParkForm, RideForm, DummyForm, ReviewSearchForm
 from functools import wraps
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash
@@ -223,44 +223,45 @@ def secret():
 
 @app.route('/reviews', methods=["GET", "POST"])
 def review_page():
-    # This route handles both displaying and submitting reviews
-    # Check for CSRF token validation
+    # -- Set up the search form (WTForms) --
+    search_form = ReviewSearchForm(request.args)
+    search_form.set_choices()
+    
+    # -- Set up the review form (for add/edit reviews) --
     edit_id = request.args.get('edit_id', type=int)
     editing = False
-    # If an edit_id is provided, we are editing an existing review
     park_id_from_query = request.args.get('park_id', type=int)
     ride_id_from_query = request.args.get('ride_id', type=int)
 
     form = ReviewForm()
-    # Set choices for the form fields
     form.set_choices()
-    # If park_id or ride_id is provided in the query string, set it in the form
+
+    # Pre-fill the review form if coming from a ride/park page
     if park_id_from_query and not edit_id:
         form.park_id.data = park_id_from_query
-
     if ride_id_from_query and not edit_id:
         form.ride_id.data = ride_id_from_query
-    # If edit_id is provided, we are editing an existing review
+
+    # Handle edit mode for reviews
     if edit_id:
         review = models.Review.query.get_or_404(edit_id)
-        # Check if the current user is the owner of the review
         if review.user_id != session.get('user_id'):
             abort(403)
         editing = True
         if request.method == "GET":
-            # Populate the form with the existing review data
             form.content.data = review.content
             form.rating.data = review.rating
-            form.ride_id.data = review.ride_id or 0  # Match 0 to "--- None ---"
+            form.ride_id.data = review.ride_id or 0
             form.park_id.data = review.park_id or 0
 
+    # Handle review form submission (create/edit)
     if form.validate_on_submit():
-        # Handle form submission for both creating and editing reviews
+        if not g.user:
+            flash("You must be logged in to write a review.", "danger")
+            return redirect(url_for("login"))
         ride_id = form.ride_id.data if form.ride_id.data != 0 else None
         park_id = form.park_id.data if form.park_id.data != 0 else None
-
         if editing:
-            # Update the existing review
             review.content = form.content.data
             review.rating = form.rating.data
             review.ride_id = ride_id
@@ -268,7 +269,6 @@ def review_page():
             db.session.commit()
             flash("Review updated!", "success")
         else:
-            # Create a new review
             new_review = models.Review(
                 content=form.content.data,
                 rating=form.rating.data,
@@ -281,8 +281,31 @@ def review_page():
             flash("Review submitted!", "success")
         return redirect(url_for("review_page"))
 
-    reviews = models.Review.query.order_by(models.Review.timestamp.desc()).all()
-    return render_template("review.html", form=form, reviews=reviews, editing=editing, page_title="Reviews")
+    # -- Filter reviews based on search form input --
+    reviews_query = models.Review.query
+    # Text search
+    if search_form.search.data:
+        reviews_query = reviews_query.filter(models.Review.content.ilike(f'%{search_form.search.data}%'))
+    # Ride filter
+    if search_form.ride_id.data is not None and search_form.ride_id.data != -1:
+        reviews_query = reviews_query.filter(models.Review.ride_id == search_form.ride_id.data)
+    # Park filter
+    if search_form.park_id.data is not None and search_form.park_id.data != -1:
+        reviews_query = reviews_query.filter(models.Review.park_id == search_form.park_id.data)
+    # Username filter
+    if search_form.username.data:
+        reviews_query = reviews_query.join(models.User).filter(models.User.username.ilike(f'%{search_form.username.data}%'))
+
+    reviews = reviews_query.order_by(models.Review.timestamp.desc()).all()
+
+    return render_template(
+        "review.html",
+        form=form,
+        search_form=search_form,
+        reviews=reviews,
+        editing=editing,
+        page_title="Reviews"
+    )
 
 
 @app.route('/reviews/delete/<int:review_id>', methods=['POST'])

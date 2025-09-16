@@ -88,3 +88,15 @@ class RideForm(FlaskForm):
 
 class DummyForm(FlaskForm):
     pass
+
+class ReviewSearchForm(FlaskForm):
+    search = StringField("Text", validators=[Optional()])
+    ride_id = SelectField("Ride", coerce=int, validators=[Optional()])
+    park_id = SelectField("Park", coerce=int, validators=[Optional()])
+    username = StringField("User", validators=[Optional()])
+    submit = SubmitField("Search")
+
+    def set_choices(self):
+        from app.models import Ride, Park
+        self.ride_id.choices = [(-1, "All")] + [(r.id, r.name) for r in Ride.query.order_by(Ride.name).all()]
+        self.park_id.choices = [(-1, "All")] + [(p.id, p.name) for p in Park.query.order_by(Park.name).all()]
