@@ -44,6 +44,11 @@ dd {
 	margin-bottom: 10;
 }
 
+body{
+    margin: 0;
+    padding: 0;
+}
+
 .main {
     margin-top: 30px; /* Add a top margin to avoid content overlay */
 }
@@ -138,7 +143,7 @@ ul li:hover ul.dropdown {
     padding-bottom: 0.5rem;
     grid-template-areas:
         'one';
-    width: 98.5vw;
+    width: 100vw;
 }
 
 /* defines the childs the hero grid*/
@@ -155,7 +160,7 @@ ul li:hover ul.dropdown {
 
 /* Sets the size for the Hero image so it fills the correct space */
 .heroimg {
-    width: 98.5vw;
+    width: 100vw;
     height: 40vh;
     border-radius: 0.5rem;
     display: block;
