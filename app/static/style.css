@@ -26,6 +26,24 @@
     src: url(/app/static/fonts/Quintessential-Regular.ttf);
 }
 
+/* Sets up Custom font */
+@font-face {
+    font-family: 'Montserrat';
+    /* Imports font from URL */
+    src: url(/app/static/fonts/Montserrat-Regular.ttf);
+}
+
+
+@font-face {
+    font-family: 'LexendDeca';
+    src: url(/app/static/fonts/LexendDeca-Regular.ttf);
+}
+
+@font-face {
+    font-family: 'Cookie-Regular';
+    src: url(/app/static/fonts/Cookie-Regular.ttf)
+}
+
 /* change default margin */
 body,
 h1,
@@ -66,16 +84,17 @@ body{
 
 
 p{
-    font-family: 'Iansui';
+    font-family: 'LexendDeca', sans-serif;
     transition: 0.75s;
     transition-delay: 50ms;
 }
 
 h1,h2,h3,h4,header{
-    font-family: 'Quintessential';
+    font-family: 'Montserrat';
 }
 
 footer{
+    margin-left: 5px;
     font-family: 'ShadowsIntoLightTwo';
 }
 
@@ -1176,4 +1195,19 @@ textarea.form-control:focus, textarea:focus {
   padding: 0.7em 1.5em;
   border-radius: 0.7em;
   margin-bottom: 1em;
+}
+
+
+/* Add down arrow to links that have dropdowns */
+ul li a.has-dropdown::after {
+    content: " ▼"; /* Downward arrow */
+    font-size: 0.7em;
+    margin-left: 6px;
+    color: #ddd; /* softer than white */
+    transition: transform 0.3s ease;
+}
+
+/* Rotate arrow when dropdown is open */
+ul li:hover > a.has-dropdown::after {
+    transform: rotate(180deg); /* points up */
 }

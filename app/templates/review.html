@@ -21,7 +21,7 @@
           {{ form.hidden_tag() }}
 
           <div class="mb-3">
-            {{ form.content.label(class="form-label") }}
+            {{ form.content.label(class="form-label") }}<br>
             {{ form.content(class="form-control") }}
           </div>
 
@@ -32,12 +32,12 @@
 
           <div class="mb-3">
             {{ form.ride_id.label(class="form-label") }}
-            {{ form.ride_id(class="form-select") }}
+            {{ form.ride_id(class="form-control") }}
           </div>
 
           <div class="mb-3">
             {{ form.park_id.label(class="form-label") }}
-            {{ form.park_id(class="form-select") }}
+            {{ form.park_id(class="form-control") }}
           </div>
 
           <button type="submit" class="review-action-btn-2024 review-action-btn-edit" style="margin-top:1em;">
