@@ -6,12 +6,12 @@ from flask_wtf.file import FileField, FileAllowed
 
 
 class RideSearchForm(FlaskForm):
-    search = StringField("Search Rides", validators=[DataRequired()])
+    search = StringField("Search Rides", validators=[DataRequired(), Length(max=100)])
     submit = SubmitField("Search")
 
 
 class ParkSearchForm(FlaskForm):
-    search = StringField("Search Parks", validators=[DataRequired()])
+    search = StringField("Search Parks", validators=[DataRequired(), Length(max=100)])
     submit = SubmitField("Search")
 
 
@@ -20,19 +20,19 @@ class RegisterForm(FlaskForm):
     # It includes fields for username, password, and confirmation
     # and uses validators to ensure the inputs are valid
     username = StringField("Username", validators=[DataRequired(), Length(min=3, max=80)])
-    password = PasswordField("Password", validators=[DataRequired(), Length(min=6)])
+    password = PasswordField("Password", validators=[DataRequired(), Length(min=6, max=128)])
     confirm = PasswordField("Confirm",  validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField("Register")
 
 
 class LoginForm(FlaskForm):
-    username = StringField("Username", validators=[DataRequired()])
-    password = PasswordField("Password", validators=[DataRequired()])
+    username = StringField("Username", validators=[DataRequired(), Length(min=3, max=80)])
+    password = PasswordField("Password", validators=[DataRequired(), Length(min=6, max=128)])
     submit = SubmitField("Login")
 
 
 class ReviewForm(FlaskForm):
-    content = TextAreaField("Your Review", validators=[DataRequired()])
+    content = TextAreaField("Your Review", validators=[DataRequired(), Length(max=1000)])
     rating = IntegerField("Rating (1–5)", validators=[
         DataRequired(),
         NumberRange(min=1, max=5, message="Rating must be between 1 and 5")
@@ -54,15 +54,15 @@ class ReviewForm(FlaskForm):
 
 
 class ParkForm(FlaskForm):
-    name = StringField("Park Name", validators=[DataRequired()])
-    location = StringField("Location", validators=[DataRequired()])
-    description = TextAreaField("Description", validators=[Optional()])
+    name = StringField("Park Name", validators=[DataRequired(), Length(max=150)])
+    location = StringField("Location", validators=[DataRequired(), Length(max=150)])
+    description = TextAreaField("Description", validators=[Optional(), Length(max=2000)])
     photo = FileField('Photo', validators=[Optional(), FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')])
     submit = SubmitField("Add Park")
 
 
 class RideForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
+    name = StringField('Name', validators=[DataRequired(), Length(max=150)])
     ride_type_id = SelectField('Ride Type', coerce=int, validators=[DataRequired()])
     layout_id = SelectField('Layout', coerce=int, validators=[DataRequired()])
     theme_id = SelectField('Theme', coerce=int, validators=[DataRequired()])
@@ -71,9 +71,9 @@ class RideForm(FlaskForm):
     restriction_id = SelectField('Restriction', coerce=int, validators=[DataRequired()])
     constructor_id = SelectField('Constructor', coerce=int, validators=[DataRequired()])
 
-    thrill_level = StringField('Thrill Level', validators=[DataRequired()])
+    thrill_level = StringField('Thrill Level', validators=[DataRequired(), Length(max=50)])
     photo = FileField('Photo', validators=[Optional(), FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')])
-    Height = IntegerField('Height (m)', validators=[Optional()])
+    Height = IntegerField('Height (m)', validators=[Optional(), NumberRange(min=0, max=250)])
     submit = SubmitField('Save')
 
     def __init__(self, *args, **kwargs):
@@ -91,10 +91,10 @@ class DummyForm(FlaskForm):
     pass
 
 class ReviewSearchForm(FlaskForm):
-    search = StringField("Text", validators=[Optional()])
+    search = StringField("Text", validators=[Optional(), Length(max=100)])
     ride_id = SelectField("Ride", coerce=int, validators=[Optional()])
     park_id = SelectField("Park", coerce=int, validators=[Optional()])
-    username = StringField("User", validators=[Optional()])
+    username = StringField("User", validators=[Optional(), Length(max=80)])
     submit = SubmitField("Search")
 
     def set_choices(self):
