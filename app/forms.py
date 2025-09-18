@@ -87,8 +87,10 @@ class RideForm(FlaskForm):
         self.restriction_id.choices = [(res.id, res.reason) for res in Restriction.query.all()]
         self.constructor_id.choices = [(c.id, c.name) for c in Constructor.query.all()]
 
+
 class DummyForm(FlaskForm):
     pass
+
 
 class ReviewSearchForm(FlaskForm):
     search = StringField("Text", validators=[Optional(), Length(max=100)])

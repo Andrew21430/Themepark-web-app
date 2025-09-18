@@ -99,7 +99,7 @@ def ride():
 def rideid(id):
     form = RideSearchForm()
     rides = models.Ride.query.join(models.Layout).order_by(models.Ride.Height.desc()).filter(models.Ride.id == id).first_or_404()
-    delete_form = DummyForm()   
+    delete_form = DummyForm()
     return render_template('ride.html', page_title='RIDES', rides=[rides], form=form, delete_form=delete_form)
 
 
@@ -226,7 +226,7 @@ def review_page():
     # -- Set up the search form (WTForms) --
     search_form = ReviewSearchForm(request.args)
     search_form.set_choices()
-    
+
     # -- Set up the review form (for add/edit reviews) --
     edit_id = request.args.get('edit_id', type=int)
     editing = False
@@ -478,7 +478,6 @@ def delete_ride(id):
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
-
 
 
 if __name__ == "__main__":
