@@ -782,6 +782,8 @@ textarea.form-control:focus, textarea:focus {
     flex-direction: column;
     align-items: center;
     pointer-events: none;
+    margin: 0;
+    background: none;
 }
 
 /* This pushes your main content to the right so it's not hidden behind the bar */
